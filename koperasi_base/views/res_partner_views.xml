@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_partner_form_koperasi" model="ir.ui.view">
+        <field name="name">res.partner.form.koperasi</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="Keanggotaan Koperasi" name="koperasi_membership" invisible="is_company">
+                    <group>
+                        <group>
+                            <field name="koperasi_status"/>
+                            <field name="koperasi_member_no" required="koperasi_status in ('anggota', 'mantan')"/>
+                        </group>
+                        <group>
+                            <field name="koperasi_join_date"/>
+                            <field name="koperasi_exit_date" invisible="koperasi_status != 'mantan'"/>
+                            <field name="koperasi_is_pengurus"/>
+                            <field name="koperasi_user_id" groups="base.group_system,koperasi_base.group_koperasi_pengurus"
+                                   options="{'no_create': True}"/>
+                        </group>
+                    </group>
+                </page>
+                <page string="Identitas &amp; KYC" name="koperasi_kyc" invisible="is_company"
+                      groups="koperasi_base.group_koperasi_petugas,koperasi_base.group_koperasi_akuntan">
+                    <div class="alert alert-info mb-2" role="alert">
+                        Data pribadi (UU 27/2022 PDP): hanya untuk keperluan pembiayaan, cocokkan dengan dokumen asli.
+                        Alamat KTP diisi di alamat kontak. Tanggal lahir dan jenis kelamin terisi otomatis dari NIK;
+                        bila berbeda dengan KTP/KK, ada peringatan merah dan KYC tidak bisa diselesaikan.
+                    </div>
+                    <group>
+                        <group string="Identitas">
+                            <field name="koperasi_nik" placeholder="16 digit"/>
+                            <field name="koperasi_nik_info" invisible="not koperasi_nik_info" class="text-muted"/>
+                            <field name="koperasi_nik_warning" invisible="not koperasi_nik_warning"
+                                   class="text-danger" style="white-space: pre-line"/>
+                            <field name="koperasi_kk_no"/>
+                            <field name="koperasi_birth_place"/>
+                            <field name="koperasi_birth_date"/>
+                            <field name="koperasi_age" invisible="not koperasi_birth_date"/>
+                            <field name="koperasi_gender"/>
+                            <field name="koperasi_mother_name"/>
+                            <field name="koperasi_marital"/>
+                            <field name="koperasi_spouse_name" invisible="koperasi_marital != 'menikah'"/>
+                            <field name="koperasi_spouse_nik" invisible="koperasi_marital != 'menikah'"/>
+                        </group>
+                        <group string="Tempat Tinggal &amp; Pekerjaan">
+                            <field name="koperasi_domicile" placeholder="Kosongkan bila sama dengan alamat KTP"/>
+                            <field name="koperasi_home_status"/>
+                            <field name="koperasi_stay_years"/>
+                            <field name="koperasi_pekerjaan"/>
+                            <field name="koperasi_employer"/>
+                            <field name="koperasi_work_years"/>
+                        </group>
+                        <group string="Kontak Darurat (tidak serumah)">
+                            <field name="koperasi_emergency_name"/>
+                            <field name="koperasi_emergency_relation"/>
+                            <field name="koperasi_emergency_phone"/>
+                        </group>
+                        <group string="Penilaian Risiko (APU-PPT)">
+                            <field name="koperasi_dttot_date"/>
+                            <field name="koperasi_dttot_result"/>
+                            <field name="koperasi_is_pep"/>
+                            <field name="koperasi_risk_level"/>
+                            <field name="koperasi_kyc_date"/>
+                            <field name="koperasi_kyc_user_id"/>
+                            <field name="koperasi_kyc_review_date" invisible="not koperasi_kyc_review_date"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_partner_list_koperasi_member" model="ir.ui.view">
+        <field name="name">res.partner.list.koperasi.member</field>
+        <field name="model">res.partner</field>
+        <field name="priority">90</field>
+        <field name="arch" type="xml">
+            <list string="Anggota Koperasi">
+                <field name="koperasi_member_no"/>
+                <field name="name"/>
+                <field name="koperasi_status" widget="badge"
+                       decoration-success="koperasi_status == 'anggota'"
+                       decoration-muted="koperasi_status == 'mantan'"/>
+                <field name="koperasi_join_date"/>
+                <field name="koperasi_exit_date" optional="hide"/>
+                <field name="koperasi_is_pengurus" optional="show" string="Pengurus"/>
+                <field name="phone" optional="show"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_res_partner_filter_koperasi" model="ir.ui.view">
+        <field name="name">res.partner.search.koperasi</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_res_partner_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//filter[@name='inactive']" position="before">
+                <filter string="Anggota" name="koperasi_anggota" domain="[('koperasi_status', '=', 'anggota')]"/>
+                <filter string="Mantan Anggota" name="koperasi_mantan" domain="[('koperasi_status', '=', 'mantan')]"/>
+                <filter string="Bukan Anggota" name="koperasi_non_anggota" domain="[('koperasi_status', '=', 'non_anggota')]"/>
+                <filter string="Pengurus Koperasi" name="koperasi_pengurus" domain="[('koperasi_is_pengurus', '=', True)]"/>
+                <separator/>
+            </xpath>
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="koperasi_member_no"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="action_koperasi_member" model="ir.actions.act_window">
+        <field name="name">Anggota</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">list,form</field>
+        <field name="view_id" ref="view_partner_list_koperasi_member"/>
+        <field name="domain">[('koperasi_status', 'in', ('anggota', 'mantan'))]</field>
+        <field name="context">{'default_koperasi_status': 'anggota', 'default_is_company': False, 'search_default_koperasi_anggota': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Tambah anggota koperasi</p>
+            <p>Anggota adalah kontak dengan status keanggotaan "Anggota" dan nomor anggota.</p>
+        </field>
+    </record>
+
+    <record id="action_koperasi_partner_all" model="ir.actions.act_window">
+        <field name="name">Semua Kontak</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">list,form</field>
+        <field name="view_id" ref="view_partner_list_koperasi_member"/>
+        <field name="domain">[('is_company', '=', False), ('type', '=', 'contact')]</field>
+    </record>
+</odoo>

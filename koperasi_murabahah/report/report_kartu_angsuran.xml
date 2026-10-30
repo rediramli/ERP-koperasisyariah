@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_kartu_angsuran_document">
+        <t t-call="web.external_layout">
+            <t t-set="o" t-value="o.with_context(lang=o.partner_id.lang or 'id_ID')"/>
+            <t t-set="cur" t-value="o.currency_id"/>
+            <div class="page">
+                <h3>Kartu Angsuran Murabahah</h3>
+                <table class="table table-sm table-borderless mb-3" style="width: 100%;">
+                    <tr>
+                        <td style="width: 20%;">No. Akad</td><td style="width: 30%;"><strong t-field="o.name"/></td>
+                        <td style="width: 20%;">Tanggal Akad</td><td style="width: 30%;"><span t-field="o.date_akad"/></td>
+                    </tr>
+                    <tr>
+                        <td>Nama</td><td><span t-field="o.partner_id.name"/></td>
+                        <td>No. Anggota</td><td><span t-out="o.member_no or '-'"/> (<span t-field="o.partner_status"/>)</td>
+                    </tr>
+                    <tr>
+                        <td>Barang</td><td><span t-field="o.product_desc"/></td>
+                        <td>Status</td><td><span t-field="o.state"/></td>
+                    </tr>
+                    <tr>
+                        <td>Harga Perolehan</td><td><span t-field="o.cost_price"/></td>
+                        <td>Uang Muka</td><td><span t-field="o.down_payment"/></td>
+                    </tr>
+                    <tr>
+                        <td>Margin</td><td><span t-field="o.margin_amount"/> (<span t-out="'%g' % o.margin_pct"/>%)</td>
+                        <td>Harga Jual</td><td><span t-field="o.sale_price"/></td>
+                    </tr>
+                    <tr>
+                        <td>Total Piutang</td><td><strong t-field="o.financed_amount"/></td>
+                        <td>Tenor / Angsuran</td><td><span t-field="o.tenor"/> bulan x <span t-field="o.installment_amount"/></td>
+                    </tr>
+                    <tr t-if="o.reschedule_count">
+                        <td>Restrukturisasi</td>
+                        <td colspan="3"><span t-out="o.reschedule_count"/> kali, terakhir
+                            <span t-out="o.reschedule_ids.sorted('sequence_no')[-1].date.strftime('%d/%m/%Y')"/>. Jadwal di bawah adalah jadwal terbaru.</td>
+                    </tr>
+                </table>
+
+                <table class="table table-sm table-bordered">
+                    <thead>
+                        <tr>
+                            <th class="text-center">Ke-</th>
+                            <th>Jatuh Tempo</th>
+                            <th class="text-end">Pokok</th>
+                            <th class="text-end">Margin</th>
+                            <th class="text-end">Angsuran</th>
+                            <th class="text-end">Terbayar</th>
+                            <th>Tgl Bayar</th>
+                            <th class="text-end">Sisa</th>
+                            <th>Status</th>
+                            <th style="width: 12%;">Paraf</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr t-foreach="o.line_ids.sorted('sequence')" t-as="line">
+                            <td class="text-center"><span t-field="line.sequence"/></td>
+                            <td><span t-field="line.date_due"/></td>
+                            <td class="text-end"><span t-field="line.amount_principal" t-options="{'widget': 'monetary', 'display_currency': cur}"/></td>
+                            <td class="text-end"><span t-field="line.amount_margin" t-options="{'widget': 'monetary', 'display_currency': cur}"/></td>
+                            <td class="text-end"><span t-field="line.amount_total" t-options="{'widget': 'monetary', 'display_currency': cur}"/></td>
+                            <td class="text-end"><span t-field="line.paid_total" t-options="{'widget': 'monetary', 'display_currency': cur}"/></td>
+                            <td><span t-field="line.date_paid"/></td>
+                            <td class="text-end"><span t-field="line.residual" t-options="{'widget': 'monetary', 'display_currency': cur}"/></td>
+                            <td><span t-field="line.status"/></td>
+                            <td/>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th colspan="2">Total</th>
+                            <th class="text-end"><span t-out="sum(o.line_ids.mapped('amount_principal'))" t-options="{'widget': 'monetary', 'display_currency': cur}"/></th>
+                            <th class="text-end"><span t-out="sum(o.line_ids.mapped('amount_margin'))" t-options="{'widget': 'monetary', 'display_currency': cur}"/></th>
+                            <th class="text-end"><span t-out="sum(o.line_ids.mapped('amount_total'))" t-options="{'widget': 'monetary', 'display_currency': cur}"/></th>
+                            <th class="text-end"><span t-out="sum(o.line_ids.mapped('paid_total'))" t-options="{'widget': 'monetary', 'display_currency': cur}"/></th>
+                            <th/>
+                            <th class="text-end"><span t-out="sum(o.line_ids.mapped('residual'))" t-options="{'widget': 'monetary', 'display_currency': cur}"/></th>
+                            <th colspan="2"/>
+                        </tr>
+                    </tfoot>
+                </table>
+
+                <table class="table table-sm table-borderless" style="width: 50%;">
+                    <tr><td>Sisa Piutang</td><td class="text-end"><strong t-field="o.remaining_receivable"/></td></tr>
+                    <tr><td>Sisa Pokok</td><td class="text-end"><span t-field="o.remaining_principal"/></td></tr>
+                    <tr><td>Sisa Margin</td><td class="text-end"><span t-field="o.remaining_margin"/></td></tr>
+                    <tr t-if="o.discount_amount"><td>Potongan Margin</td><td class="text-end"><span t-field="o.discount_amount"/></td></tr>
+                    <tr t-if="o.state == 'aktif'"><td>Tunggakan</td><td class="text-end"><span t-field="o.arrears_amount"/> (<span t-field="o.arrears_days"/> hari, <span t-field="o.collectibility"/>)</td></tr>
+                </table>
+                <p class="text-muted small">Dicetak <span t-out="context_timestamp(datetime.datetime.now()).strftime('%d/%m/%Y %H:%M')"/>.
+                    Harga jual tetap selama akad. Denda keterlambatan (jika ada) disalurkan sebagai dana kebajikan, bukan pendapatan koperasi.</p>
+            </div>
+        </t>
+    </template>
+
+    <template id="report_kartu_angsuran">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="koperasi_murabahah.report_kartu_angsuran_document"/>
+            </t>
+        </t>
+    </template>
+</odoo>

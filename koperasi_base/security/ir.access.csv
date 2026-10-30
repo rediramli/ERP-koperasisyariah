@@ -1,0 +1,3 @@
+id,name,model_id,group_id/id,operation,domain
+access_wilayah_user,wilayah user,koperasi.wilayah,base.group_user,r,
+access_wilayah_akuntan,wilayah akuntan,koperasi.wilayah,koperasi_base.group_koperasi_akuntan,crud,

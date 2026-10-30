@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_akad_list">
+        <t t-call="web.html_container">
+            <t t-set="o" t-value="docs[:1]"/>
+            <t t-set="cur" t-value="docs[:1].currency_id"/>
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <h3>Daftar Akad Murabahah</h3>
+                    <p>Per <span t-out="context_timestamp(datetime.datetime.now()).strftime('%d/%m/%Y')"/></p>
+                    <table class="table table-sm table-bordered">
+                        <thead>
+                            <tr>
+                                <th>No. Akad</th>
+                                <th>Nama</th>
+                                <th>Barang</th>
+                                <th>Tgl Akad</th>
+                                <th class="text-end">Total Piutang</th>
+                                <th class="text-end">Sisa Pokok</th>
+                                <th class="text-end">Sisa Margin</th>
+                                <th class="text-end">Sisa Piutang</th>
+                                <th class="text-end">Tunggakan</th>
+                                <th class="text-end">Hari</th>
+                                <th>Kolektibilitas</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr t-foreach="docs.sorted(lambda a: (a.partner_id.name or '', a.name))" t-as="a">
+                                <td><span t-field="a.name"/></td>
+                                <td><span t-field="a.partner_id.name"/></td>
+                                <td><span t-field="a.product_desc"/></td>
+                                <td><span t-field="a.date_akad"/></td>
+                                <td class="text-end"><span t-field="a.financed_amount"/></td>
+                                <td class="text-end"><span t-field="a.remaining_principal"/></td>
+                                <td class="text-end"><span t-field="a.remaining_margin"/></td>
+                                <td class="text-end"><span t-field="a.remaining_receivable"/></td>
+                                <td class="text-end"><span t-field="a.arrears_amount"/></td>
+                                <td class="text-end"><span t-field="a.arrears_days"/></td>
+                                <td><span t-if="a.state == 'aktif'" t-field="a.collectibility"/><span t-else="" t-field="a.state"/></td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th colspan="4">Total (<span t-out="len(docs)"/> akad)</th>
+                                <th class="text-end"><span t-out="sum(docs.mapped('financed_amount'))" t-options="{'widget': 'monetary', 'display_currency': cur}"/></th>
+                                <th class="text-end"><span t-out="sum(docs.mapped('remaining_principal'))" t-options="{'widget': 'monetary', 'display_currency': cur}"/></th>
+                                <th class="text-end"><span t-out="sum(docs.mapped('remaining_margin'))" t-options="{'widget': 'monetary', 'display_currency': cur}"/></th>
+                                <th class="text-end"><span t-out="sum(docs.mapped('remaining_receivable'))" t-options="{'widget': 'monetary', 'display_currency': cur}"/></th>
+                                <th class="text-end"><span t-out="sum(docs.mapped('arrears_amount'))" t-options="{'widget': 'monetary', 'display_currency': cur}"/></th>
+                                <th colspan="2"/>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>

@@ -1,0 +1,343 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="homepage" name="Beranda Koperasi">
+        <t t-call="website.layout">
+            <div id="wrap" class="oe_structure ksbk-body">
+                <!-- HERO SECTION -->
+                <section class="ksbk-hero">
+                    <div class="container">
+                        <div class="row align-items-center">
+                            <div class="col-lg-7 mb-5 mb-lg-0">
+                                <div class="ksbk-badge-pill">
+                                    <i class="fa fa-shield"></i> Syariah • Amanah • Tanpa Riba
+                                </div>
+                                <h1 class="ksbk-hero-title">
+                                    Solusi Pembiayaan &amp; Simpanan Syariah yang Berkah
+                                </h1>
+                                <p class="ksbk-hero-subtitle">
+                                    <t t-out="res_company.name"/> hadir memberikan solusi permodalan usaha dan pengadaan barang halal dengan akad Murabahah yang adil, transparan, dan terpercaya.
+                                </p>
+                                <div class="d-flex flex-wrap gap-3">
+                                    <a href="/pengajuan" class="btn-ksbk-gold">
+                                        <i class="fa fa-paper-plane me-2"></i> Ajukan Pembiayaan
+                                    </a>
+                                    <a href="/daftar" class="btn-ksbk-outline-light">
+                                        <i class="fa fa-user-plus me-2"></i> Daftar Jadi Anggota
+                                    </a>
+                                </div>
+
+                                <!-- Mini Badges -->
+                                <div class="row mt-5 pt-3 border-top border-secondary border-opacity-25">
+                                    <div class="col-4">
+                                        <h4 class="fw-bold mb-0 text-warning"><t t-out="total_members"/>+</h4>
+                                        <small class="text-white-50">Anggota Terdaftar</small>
+                                    </div>
+                                    <div class="col-4">
+                                        <h4 class="fw-bold mb-0 text-warning"><t t-out="total_akad"/>+</h4>
+                                        <small class="text-white-50">Akad Disalurkan</small>
+                                    </div>
+                                    <div class="col-4">
+                                        <h4 class="fw-bold mb-0 text-warning">100%</h4>
+                                        <small class="text-white-50">Kesesuaian Syariah</small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- KALKULATOR SIMULASI WIDGET -->
+                            <div class="col-lg-5">
+                                <div class="ksbk-calc-card" id="ksbk-calc-widget" t-att-data-margin-pct="margin_pct">
+                                    <div class="ksbk-calc-header text-center">
+                                        <span class="badge bg-success bg-opacity-10 text-success px-3 py-2 rounded-pill fw-semibold mb-2">
+                                            Simulasi Instan
+                                        </span>
+                                        <h4 class="fw-bold mb-1">Kalkulator Murabahah</h4>
+                                        <p class="text-muted small mb-0">Hitung perkiraan angsuran bulanan Anda</p>
+                                    </div>
+
+                                    <div class="ksbk-slider-container">
+                                        <div class="d-flex justify-content-between align-items-center mb-2">
+                                            <label class="form-label fw-bold mb-0 small">Kebutuhan Plafon (Rp)</label>
+                                            <input type="text" id="calc-plafon-input" class="form-control form-control-sm text-end fw-bold text-success border-success" style="max-width: 150px;" value="Rp 10.000.000"/>
+                                        </div>
+                                        <input type="range" class="form-range" id="calc-plafon-slider" min="1000000" max="50000000" step="500000" value="10000000"/>
+                                        <div class="d-flex justify-content-between text-muted" style="font-size: 0.75rem;">
+                                            <span>Rp 1 Jt</span>
+                                            <span>Rp 25 Jt</span>
+                                            <span>Rp 50 Jt</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="row g-2 mb-3">
+                                        <div class="col-6">
+                                            <label class="form-label fw-bold small">Jangka Waktu (Tenor)</label>
+                                            <select id="calc-tenor-select" class="form-select form-select-sm">
+                                                <option value="3">3 Bulan</option>
+                                                <option value="6">6 Bulan</option>
+                                                <option value="12" selected="selected">12 Bulan (1 Thn)</option>
+                                                <option value="18">18 Bulan</option>
+                                                <option value="24">24 Bulan (2 Thn)</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-6">
+                                            <label class="form-label fw-bold small">Rencana DP / Uang Muka</label>
+                                            <input type="text" id="calc-dp-input" class="form-control form-control-sm text-end" value="Rp 0" placeholder="Rp 0"/>
+                                        </div>
+                                    </div>
+
+                                    <!-- Hasil Estimasi -->
+                                    <div class="ksbk-calc-result text-center">
+                                        <span class="text-muted small fw-semibold text-uppercase">Perkiraan Angsuran / Bulan</span>
+                                        <div class="ksbk-result-val mt-1" id="calc-result-angsuran">Rp 1.000.000</div>
+                                        <div class="row pt-3 mt-3 border-top border-success border-opacity-25" style="font-size: 0.82rem;">
+                                            <div class="col-6 text-start">
+                                                <span class="text-muted">Porsi Pokok:</span><br/>
+                                                <strong id="calc-result-pokok">Rp 833.333</strong>
+                                            </div>
+                                            <div class="col-6 text-end">
+                                                <span class="text-muted">Porsi Margin:</span><br/>
+                                                <strong id="calc-result-margin">Rp 166.667</strong>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="mt-4 text-center">
+                                        <a href="/pengajuan" id="calc-btn-ajukan" class="btn btn-ksbk-green w-100 py-2">
+                                            Lanjutkan Pengajuan Ini <i class="fa fa-arrow-right ms-1"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 4 PILAR KEUNGGULAN SYARIAH -->
+                <section class="py-5 bg-white border-bottom">
+                    <div class="container py-4">
+                        <div class="row text-center mb-5">
+                            <div class="col-lg-8 mx-auto">
+                                <span class="badge bg-success bg-opacity-10 text-success px-3 py-2 rounded-pill fw-semibold mb-2">Mengapa Memilih Kami</span>
+                                <h2 class="fw-bold">Prinsip Muamalah yang Menentramkan</h2>
+                                <p class="text-muted">Komitmen penuh menjalankan syariat Islam dalam seluruh aktivitas pembiayaan dan simpanan.</p>
+                            </div>
+                        </div>
+                        <div class="row g-4">
+                            <div class="col-md-3">
+                                <div class="ksbk-feature-card">
+                                    <div class="ksbk-icon-box">
+                                        <i class="fa fa-ban"></i>
+                                    </div>
+                                    <h5 class="fw-bold mb-2">Bebas Riba &amp; Denda</h5>
+                                    <p class="text-muted small mb-0">Tidak mengenakan bunga kredit. Keterlambatan tidak dikenakan denda berbunga yang menzalimi anggota.</p>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="ksbk-feature-card">
+                                    <div class="ksbk-icon-box">
+                                        <i class="fa fa-file-text-o"></i>
+                                    </div>
+                                    <h5 class="fw-bold mb-2">Akad Murabahah Jelas</h5>
+                                    <p class="text-muted small mb-0">Harga perolehan dan margin keuntungan disepakati bersama di awal tanpa perubahan nominal di tengah jalan.</p>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="ksbk-feature-card">
+                                    <div class="ksbk-icon-box">
+                                        <i class="fa fa-handshake-o"></i>
+                                    </div>
+                                    <h5 class="fw-bold mb-2">Dari &amp; Untuk Anggota</h5>
+                                    <p class="text-muted small mb-0">Keuntungan usaha koperasi dinikmati bersama melalui Sisa Hasil Usaha (SHU) tahunan secara adil.</p>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="ksbk-feature-card">
+                                    <div class="ksbk-icon-box">
+                                        <i class="fa fa-bolt"></i>
+                                    </div>
+                                    <h5 class="fw-bold mb-2">Proses Cepat &amp; Mudah</h5>
+                                    <p class="text-muted small mb-0">Pengajuan dapat dilakukan langsung via website dan proses verifikasi cepat oleh pengurus amanah.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- LAYANAN KOPERASI -->
+                <section class="py-5" id="layanan">
+                    <div class="container py-4">
+                        <div class="row text-center mb-5">
+                            <div class="col-lg-8 mx-auto">
+                                <span class="badge bg-success bg-opacity-10 text-success px-3 py-2 rounded-pill fw-semibold mb-2">Layanan Koperasi</span>
+                                <h2 class="fw-bold">Produk Syariah yang Tersedia</h2>
+                                <p class="text-muted">Pilihan pembiayaan dan simpanan yang sesuai dengan kebutuhan riil Anda.</p>
+                            </div>
+                        </div>
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <div class="card h-100 border-0 shadow-sm p-4 rounded-4">
+                                    <div class="d-flex align-items-center mb-3">
+                                        <div class="ksbk-icon-box me-3 mb-0">
+                                            <i class="fa fa-shopping-cart"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="fw-bold mb-1">Pembiayaan Murabahah</h4>
+                                            <span class="badge bg-primary bg-opacity-10 text-primary">Jual Beli Halal</span>
+                                        </div>
+                                    </div>
+                                    <p class="text-muted mb-4">
+                                        Pembiayaan pengadaan barang (peralatan usaha, stok dagangan, kendaraan, laptop/gadget, atau renovasi) di mana koperasi membeli barang yang Anda butuhkan dan menjualnya kepada Anda dengan pembayaran angsuran tetap.
+                                    </p>
+                                    <ul class="list-unstyled mb-4 small text-muted">
+                                        <li class="mb-2"><i class="fa fa-check-circle text-success me-2"></i> Plafon hingga Rp 50.000.000</li>
+                                        <li class="mb-2"><i class="fa fa-check-circle text-success me-2"></i> Tenor fleksibel 3 s/d 24 bulan</li>
+                                        <li class="mb-2"><i class="fa fa-check-circle text-success me-2"></i> Angsuran tetap dari awal hingga lunas</li>
+                                    </ul>
+                                    <a href="/pengajuan" class="btn btn-outline-success mt-auto fw-bold">Ajukan Pembiayaan Ini</a>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="card h-100 border-0 shadow-sm p-4 rounded-4">
+                                    <div class="d-flex align-items-center mb-3">
+                                        <div class="ksbk-icon-box me-3 mb-0" style="background: #fff8e6; color: #b89325;">
+                                            <i class="fa fa-database"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="fw-bold mb-1">Keanggotaan &amp; Simpanan</h4>
+                                            <span class="badge bg-warning bg-opacity-10 text-warning text-dark">Tabungan Syariah</span>
+                                        </div>
+                                    </div>
+                                    <p class="text-muted mb-4">
+                                        Bergabunglah menjadi bagian dari pemilik koperasi. Ikut serta menggerakkan ekonomi umat melalui simpanan pokok, simpanan wajib, dan simpanan sukarela dengan pengelolaan transparan dan profesional.
+                                    </p>
+                                    <ul class="list-unstyled mb-4 small text-muted">
+                                        <li class="mb-2"><i class="fa fa-check-circle text-success me-2"></i> Hak suara dalam Rapat Anggota Tahunan (RAT)</li>
+                                        <li class="mb-2"><i class="fa fa-check-circle text-success me-2"></i> Mendapatkan pembagian Sisa Hasil Usaha (SHU)</li>
+                                        <li class="mb-2"><i class="fa fa-check-circle text-success me-2"></i> Berhak mengajukan pembiayaan koperasi</li>
+                                    </ul>
+                                    <a href="/daftar" class="btn btn-outline-dark mt-auto fw-bold">Daftar Jadi Anggota</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ALUR PENGAJUAN (4 LANGKAH MUDAH) -->
+                <section class="py-5 bg-white border-top border-bottom">
+                    <div class="container py-4">
+                        <div class="row text-center mb-5">
+                            <div class="col-lg-8 mx-auto">
+                                <span class="badge bg-success bg-opacity-10 text-success px-3 py-2 rounded-pill fw-semibold mb-2">Mudah &amp; Transparan</span>
+                                <h2 class="fw-bold">Alur 4 Langkah Pengajuan</h2>
+                                <p class="text-muted">Proses yang ringkas dan terukur tanpa birokrasi berbelit.</p>
+                            </div>
+                        </div>
+                        <div class="row g-4 text-center">
+                            <div class="col-md-3">
+                                <div class="ksbk-step-number mx-auto">1</div>
+                                <h6 class="fw-bold">Daftar / Registrasi</h6>
+                                <p class="text-muted small">Isi formulir data diri di website dan unggah KTP secara online.</p>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="ksbk-step-number mx-auto">2</div>
+                                <h6 class="fw-bold">Pilih Kebutuhan</h6>
+                                <p class="text-muted small">Tentukan barang yang dibutuhkan, nilai plafon, dan jangka waktu angsuran.</p>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="ksbk-step-number mx-auto">3</div>
+                                <h6 class="fw-bold">Verifikasi &amp; Ijab Akad</h6>
+                                <p class="text-muted small">Pengurus memverifikasi kelayakan dan melangsungkan akad jual-beli Murabahah.</p>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="ksbk-step-number mx-auto">4</div>
+                                <h6 class="fw-bold">Serah Terima Barang</h6>
+                                <p class="text-muted small">Barang dibeli koperasi dan diserahterimakan kepada Anda untuk mulai diangsur.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- FAQ ACCORDION -->
+                <section class="py-5">
+                    <div class="container py-4">
+                        <div class="row text-center mb-5">
+                            <div class="col-lg-8 mx-auto">
+                                <span class="badge bg-success bg-opacity-10 text-success px-3 py-2 rounded-pill fw-semibold mb-2">Tanya Jawab</span>
+                                <h2 class="fw-bold">Pertanyaan yang Sering Diajukan</h2>
+                            </div>
+                        </div>
+                        <div class="row justify-content-center">
+                            <div class="col-lg-8">
+                                <div class="accordion shadow-sm" id="accordionFaq">
+                                    <div class="accordion-item border-0 mb-3 rounded-3 overflow-hidden">
+                                        <h2 class="accordion-header" id="headingOne">
+                                            <button class="accordion-button fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne">
+                                                Apa syarat untuk menjadi anggota <t t-out="res_company.name"/>?
+                                            </button>
+                                        </h2>
+                                        <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionFaq">
+                                            <div class="accordion-body text-muted">
+                                                Warga Negara Indonesia (WNI), memiliki KTP sah, beritikad baik menjalankan syariat Islam, mengisi formulir pendaftaran anggota, dan menyetorkan Simpanan Pokok serta Simpanan Wajib sesuai AD/ART koperasi.
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="accordion-item border-0 mb-3 rounded-3 overflow-hidden">
+                                        <h2 class="accordion-header" id="headingTwo">
+                                            <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo">
+                                                Bagaimana jika terjadi keterlambatan pembayaran angsuran?
+                                            </button>
+                                        </h2>
+                                        <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionFaq">
+                                            <div class="accordion-body text-muted">
+                                                <t t-out="res_company.name"/> tidak mengambil keuntungan bunga dari keterlambatan. Jika nasabah mengalami kesulitan, dapat diajukan musyawarah restrukturisasi. Sanksi ta'zir yang dikenakan atas kelalaian murni disalurkan ke Dana Sosial / Kebajikan, bukan menjadi pendapatan operasional koperasi.
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="accordion-item border-0 mb-3 rounded-3 overflow-hidden">
+                                        <h2 class="accordion-header" id="headingThree">
+                                            <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree">
+                                                Apakah boleh melakukan pelunasan dipercepat?
+                                            </button>
+                                        </h2>
+                                        <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionFaq">
+                                            <div class="accordion-body text-muted">
+                                                Tentu saja boleh. Bahkan pengurus koperasi berwenang memberikan potongan margin (diskon) atas pelunasan dipercepat sebagai bentuk apresiasi kepada anggota.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- CALL TO ACTION BANNER -->
+                <section class="py-5 text-white text-center" style="background: linear-gradient(135deg, #0a6638 0%, #074e2b 100%);">
+                    <div class="container py-4">
+                        <h2 class="fw-bold mb-3">Siap Mengembangkan Usaha Bersama Koperasi Syariah?</h2>
+                        <p class="text-white-50 mb-4 mx-auto" style="max-width: 600px;">
+                            Daftarkan diri Anda hari ini atau langsung ajukan kebutuhan pembiayaan barang Anda secara online.
+                        </p>
+                        <div class="d-flex justify-content-center gap-3 flex-wrap">
+                            <a href="/daftar" class="btn-ksbk-gold">
+                                <i class="fa fa-user-plus me-1"></i> Gabung Menjadi Anggota
+                            </a>
+                            <a href="/pengajuan" class="btn-ksbk-outline-light">
+                                <i class="fa fa-file-text-o me-1"></i> Ajukan Pembiayaan
+                            </a>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- FLOATING WHATSAPP BUTTON -->
+                <a t-att-href="'https://wa.me/' + wa_number + '?text=' + ('Halo Admin %s, saya ingin bertanya seputar keanggotaan dan pembiayaan.' % res_company.name).replace(' ', '%20')"
+                   class="ksbk-floating-wa" target="_blank" title="Chat WhatsApp Customer Service">
+                    <i class="fa fa-whatsapp fa-lg"></i>
+                    <span>Tanya CS Kami</span>
+                </a>
+            </div>
+        </t>
+    </template>
+</odoo>

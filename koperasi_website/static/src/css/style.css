@@ -1,0 +1,302 @@
+/* Koperasi Syariah - Modern Sharia Cooperative Theme */
+:root {
+    --ksbk-primary: #0a6638;
+    --ksbk-primary-dark: #074e2b;
+    --ksbk-primary-light: #128a4e;
+    --ksbk-accent: #d4af37;
+    --ksbk-accent-hover: #b89325;
+    --ksbk-dark: #111d16;
+    --ksbk-light: #f7faf8;
+    --ksbk-card-bg: #ffffff;
+    --ksbk-border: #e3ece6;
+    --ksbk-text: #2c3e35;
+    --ksbk-text-muted: #6b7f74;
+}
+
+/* Base tweaks */
+.ksbk-body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    color: var(--ksbk-text);
+    background-color: var(--ksbk-light);
+}
+
+/* Hero Section */
+.ksbk-hero {
+    background: linear-gradient(135deg, #074e2b 0%, #0a6638 50%, #114e30 100%);
+    color: #ffffff;
+    padding: 80px 0 90px;
+    position: relative;
+    overflow: hidden;
+}
+
+.ksbk-hero::before {
+    content: "";
+    position: absolute;
+    top: -50%;
+    right: -10%;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(212, 175, 55, 0.15) 0%, rgba(255, 255, 255, 0) 70%);
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+.ksbk-badge-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    padding: 6px 16px;
+    border-radius: 50px;
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: #ffd966;
+    margin-bottom: 20px;
+}
+
+.ksbk-hero-title {
+    font-size: 2.75rem;
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 20px;
+    color: #ffffff;
+}
+
+.ksbk-hero-subtitle {
+    font-size: 1.15rem;
+    line-height: 1.6;
+    color: #d1e7dd;
+    margin-bottom: 35px;
+    max-width: 580px;
+}
+
+/* Buttons */
+.btn-ksbk-gold {
+    background-color: var(--ksbk-accent);
+    color: #1a1a1a;
+    font-weight: 700;
+    padding: 12px 28px;
+    border-radius: 8px;
+    border: none;
+    box-shadow: 0 4px 14px rgba(212, 175, 55, 0.4);
+    transition: all 0.25s ease;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn-ksbk-gold:hover {
+    background-color: var(--ksbk-accent-hover);
+    color: #000000;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(212, 175, 55, 0.5);
+}
+
+.btn-ksbk-outline-light {
+    background-color: transparent;
+    color: #ffffff;
+    font-weight: 600;
+    padding: 12px 26px;
+    border-radius: 8px;
+    border: 2px solid rgba(255, 255, 255, 0.6);
+    transition: all 0.25s ease;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn-ksbk-outline-light:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+    color: #ffffff;
+    border-color: #ffffff;
+    transform: translateY(-2px);
+}
+
+.btn-ksbk-green {
+    background-color: var(--ksbk-primary);
+    color: #ffffff;
+    font-weight: 700;
+    padding: 12px 26px;
+    border-radius: 8px;
+    border: none;
+    transition: all 0.25s ease;
+}
+
+.btn-ksbk-green:hover {
+    background-color: var(--ksbk-primary-dark);
+    color: #ffffff;
+    transform: translateY(-2px);
+}
+
+/* Calculator Widget */
+.ksbk-calc-card {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 32px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+    border: 1px solid var(--ksbk-border);
+    color: var(--ksbk-text);
+}
+
+.ksbk-calc-header {
+    border-bottom: 2px dashed #e9ecef;
+    padding-bottom: 16px;
+    margin-bottom: 24px;
+}
+
+.ksbk-slider-container {
+    margin-bottom: 20px;
+}
+
+.ksbk-calc-result {
+    background: linear-gradient(145deg, #f0f7f3 0%, #e2efe8 100%);
+    border-radius: 12px;
+    padding: 20px;
+    border: 1px solid #c7e2d3;
+    margin-top: 24px;
+}
+
+.ksbk-result-val {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--ksbk-primary);
+    line-height: 1;
+}
+
+/* Feature Cards */
+.ksbk-feature-card {
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 28px;
+    border: 1px solid var(--ksbk-border);
+    box-shadow: 0 4px 16px rgba(10, 102, 56, 0.05);
+    transition: all 0.3s ease;
+    height: 100%;
+}
+
+.ksbk-feature-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 28px rgba(10, 102, 56, 0.12);
+    border-color: #a4d4bc;
+}
+
+.ksbk-icon-box {
+    width: 58px;
+    height: 58px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.6rem;
+    margin-bottom: 20px;
+    background: #e6f3ec;
+    color: var(--ksbk-primary);
+}
+
+/* Stat Box */
+.ksbk-stat-box {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    border: 1px solid var(--ksbk-border);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+}
+
+.ksbk-stat-number {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: var(--ksbk-primary);
+}
+
+/* Steps / Alur */
+.ksbk-step-number {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--ksbk-primary);
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.2rem;
+    margin-bottom: 16px;
+}
+
+/* Floating WhatsApp Button */
+.ksbk-floating-wa {
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #25d366;
+    color: #ffffff !important;
+    padding: 12px 20px;
+    border-radius: 50px;
+    box-shadow: 0 8px 24px rgba(37, 211, 102, 0.45);
+    font-weight: 700;
+    font-size: 0.95rem;
+    text-decoration: none !important;
+    transition: all 0.3s ease;
+}
+
+.ksbk-floating-wa:hover {
+    background: #20ba59;
+    transform: scale(1.05) translateY(-3px);
+    box-shadow: 0 12px 28px rgba(37, 211, 102, 0.6);
+}
+
+/* Forms styling */
+.ksbk-form-container {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 40px;
+    border: 1px solid var(--ksbk-border);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+}
+
+.ksbk-form-label {
+    font-weight: 600;
+    color: #24342d;
+    margin-bottom: 6px;
+}
+
+.ksbk-form-control {
+    border-radius: 8px;
+    border: 1.5px solid #d0ded6;
+    padding: 12px 14px;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+}
+
+.ksbk-form-control:focus {
+    border-color: var(--ksbk-primary);
+    box-shadow: 0 0 0 4px rgba(10, 102, 56, 0.15);
+    outline: none;
+}
+
+/* Success Card */
+.ksbk-success-card {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 48px 36px;
+    text-align: center;
+    box-shadow: 0 12px 36px rgba(0,0,0,0.06);
+    border: 1px solid var(--ksbk-border);
+}
+
+.ksbk-success-icon {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: #e6f7ee;
+    color: #0a6638;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.8rem;
+    margin-bottom: 24px;
+}

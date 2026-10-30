@@ -1,0 +1,453 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Shared pieces -->
+    <template id="doc_draft_banner">
+        <div t-if="not v['approved']"
+             style="border: 2px solid #b00; color: #b00; padding: 4px; text-align: center; margin-bottom: 10px; font-weight: bold;">
+            DRAF: format dokumen ini belum disetujui Dewan Pengawas Syariah (DPS)
+        </div>
+    </template>
+
+    <template id="doc_spec_table">
+        <table class="table table-sm table-bordered" style="width: 100%;">
+            <tr t-foreach="v['spec']" t-as="row">
+                <td style="width: 35%;"><t t-out="row[0]"/></td>
+                <td><t t-out="row[1]"/></td>
+            </tr>
+        </table>
+    </template>
+
+    <!-- ============================================================ -->
+    <!-- Akad Pembiayaan Murabahah                                     -->
+    <!-- ============================================================ -->
+    <template id="report_akad_murabahah_document">
+        <t t-call="web.external_layout">
+            <t t-set="v" t-value="o.get_document_values()"/>
+            <div class="page" style="font-size: 10pt;">
+                <t t-call="koperasi_murabahah.doc_draft_banner"/>
+                <h4 class="text-center mb-0">AKAD PEMBIAYAAN MURABAHAH</h4>
+                <p class="text-center">No. <t t-out="o.name"/></p>
+                <p class="text-center"><em>Bismillahirrahmanirrahim</em></p>
+
+                <p>Pada hari <t t-out="v['day_akad'] or v['dots']"/>, tanggal <t t-out="v['date_akad'] or v['dots']"/>,
+                    di <t t-out="v['city'] or v['dots']"/>, yang bertanda tangan di bawah ini:</p>
+                <ol>
+                    <li><strong t-out="v['company'].name"/>, beralamat di <t t-out="v['company_address']"/>,
+                        dalam hal ini diwakili oleh <t t-out="v['signatory'] or v['dots']"/> selaku <t t-out="v['signatory_title']"/>,
+                        selanjutnya disebut <strong>KOPERASI</strong>.</li>
+                    <li><strong t-out="o.partner_id.name"/>, No. Anggota <t t-out="v['member_no']"/>,
+                        beralamat di <t t-out="v['partner_address']"/>, No. HP <t t-out="v['partner_phone']"/>,
+                        selanjutnya disebut <strong>ANGGOTA</strong>.</li>
+                </ol>
+                <p>Para pihak terlebih dahulu menerangkan bahwa:</p>
+                <ol type="a">
+                    <li>ANGGOTA telah mengajukan pembiayaan untuk memperoleh barang sebagaimana Pasal 1 dan berjanji (wa'd) untuk membelinya dari KOPERASI<t t-if="v['date_wad']"> pada tanggal <t t-out="v['date_wad']"/></t>.</li>
+                    <li>KOPERASI telah membeli barang tersebut<t t-if="o.purchase_method == 'wakalah'"> melalui <t t-out="(o.wakil_id or o.partner_id).name"/> sebagai wakil KOPERASI berdasarkan Akad Wakalah tanggal <t t-out="v['date_wakalah'] or v['dots']"/></t><t t-if="o.supplier_id"> dari <t t-out="o.supplier_id.name"/></t><t t-if="v['date_purchase']"> pada tanggal <t t-out="v['date_purchase']"/></t><t t-if="o.supplier_invoice_ref"> (faktur no. <t t-out="o.supplier_invoice_ref"/>)</t>, sehingga barang telah menjadi milik KOPERASI sebelum akad ini.</li>
+                    <li>Para pihak sepakat melakukan jual beli murabahah dengan ketentuan sebagai berikut.</li>
+                </ol>
+
+                <h6 class="mt-3">Pasal 1: Objek Akad</h6>
+                <p>KOPERASI menjual kepada ANGGOTA, dan ANGGOTA membeli dari KOPERASI, barang dengan spesifikasi:</p>
+                <t t-call="koperasi_murabahah.doc_spec_table"/>
+
+                <h6>Pasal 2: Harga</h6>
+                <table class="table table-sm table-bordered" style="width: 100%;">
+                    <tr t-foreach="v['cost_lines']" t-as="cl"><td style="width: 55%; padding-left: 1.5em;" t-out="cl[0]"/><td class="text-end" t-out="cl[1]"/></tr>
+                    <tr><td style="width: 55%;">Harga perolehan (harga beli KOPERASI)</td><td class="text-end" t-out="v['cost']"/></tr>
+                    <tr><td>Margin keuntungan KOPERASI (<t t-out="v['margin_pct']"/>% dari harga perolehan dikurangi uang muka)</td><td class="text-end" t-out="v['margin']"/></tr>
+                    <tr><td><strong>Harga jual</strong></td><td class="text-end"><strong t-out="v['sale_price']"/></td></tr>
+                    <tr><td>Uang muka yang dibayar ANGGOTA</td><td class="text-end" t-out="v['down_payment']"/></tr>
+                    <tr><td><strong>Utang ANGGOTA (harga jual dikurangi uang muka)</strong></td><td class="text-end"><strong t-out="v['financed']"/></td></tr>
+                </table>
+                <p>Harga jual: <em t-out="v['sale_price_words']"/>. Utang ANGGOTA: <em t-out="v['financed_words']"/>.
+                    KOPERASI menyatakan dengan jujur bahwa harga perolehan di atas adalah harga beli barang beserta biaya langsung perolehannya.
+                    Harga jual dan margin dinyatakan dalam rupiah, disepakati para pihak, dan <strong>tidak berubah selama masa akad</strong>.</p>
+
+                <h6>Pasal 3: Cara Pembayaran</h6>
+                <p>ANGGOTA membayar utangnya secara angsuran sebanyak <t t-out="v['count']"/> kali, sebesar <t t-out="v['installment']"/>
+                    (<em t-out="v['installment_words']"/>) per bulan sesuai Jadwal Angsuran terlampir, mulai <t t-out="v['first_due'] or v['dots']"/>
+                    sampai <t t-out="v['last_due'] or v['dots']"/>. Pembayaran dilakukan ke kas atau rekening atas nama KOPERASI.</p>
+
+                <h6>Pasal 4: Kepemilikan, Serah Terima, dan Agunan</h6>
+                <p>Sejak akad ini ditandatangani, kepemilikan barang berpindah kepada ANGGOTA. KOPERASI menyerahkan barang kepada ANGGOTA
+                    dan serah terima dibuktikan dengan Berita Acara Serah Terima. Kerusakan atau kehilangan barang sebelum serah terima
+                    menjadi tanggung jawab KOPERASI, kecuali disebabkan kelalaian ANGGOTA.</p>
+                <t t-if="v['agunan']">
+                    <p>Untuk menjamin pembayaran utangnya, ANGGOTA menyerahkan agunan berikut kepada KOPERASI:</p>
+                    <table class="table table-sm table-bordered" style="width: 100%;">
+                        <tr t-foreach="v['agunan']" t-as="ag">
+                            <td style="width: 25%;" t-out="ag['type']"/>
+                            <td><t t-out="ag['description']"/><t t-if="ag['document_no']"> (no. <t t-out="ag['document_no']"/>)</t></td>
+                            <td class="text-end" style="width: 20%;" t-out="ag['value']"/>
+                        </tr>
+                    </table>
+                    <p>Agunan dikembalikan setelah utang ANGGOTA lunas. Jika ANGGOTA tidak memenuhi kewajibannya, agunan dapat dijual
+                        dengan harga pasar atau harga yang disepakati; kelebihan hasil penjualan dikembalikan kepada ANGGOTA dan
+                        kekurangannya tetap menjadi utang ANGGOTA.</p>
+                </t>
+
+                <h6>Pasal 5: Khiyar (Hak Tukar Barang Cacat)</h6>
+                <p>ANGGOTA berhak menukar barang apabila terdapat kondisi berikut: <t t-out="o.khiyar_terms or v['dots']"/>
+                    Hak ini dapat digunakan paling lambat <t t-out="o.khiyar_days"/> hari setelah serah terima, dan berakhir lebih awal
+                    apabila ANGGOTA menyatakan menerima barang dalam kondisi baik pada Berita Acara Serah Terima.</p>
+
+                <h6>Pasal 6: Pelunasan Sebelum Jatuh Tempo</h6>
+                <p>ANGGOTA dapat melunasi utangnya sebelum jatuh tempo dan KOPERASI tidak akan menghalanginya. Potongan pelunasan,
+                    jika ada, ditetapkan KOPERASI pada saat pelunasan sesuai fatwa DSN-MUI dan tidak diperjanjikan dalam akad ini.</p>
+
+                <h6>Pasal 7: Keterlambatan Pembayaran</h6>
+                <p t-if="o.tazir_terms">ANGGOTA yang mampu membayar tetapi sengaja menunda pembayaran dapat dikenakan sanksi (ta'zir) sebagai berikut:
+                    <t t-out="o.tazir_terms"/> ANGGOTA berhak membuktikan bahwa keterlambatan terjadi karena ketidakmampuan, bukan kesengajaan.
+                    Dana ta'zir disalurkan sebagai dana kebajikan dan tidak menjadi pendapatan KOPERASI.</p>
+                <p t-else="">Akad ini tidak mengenakan denda keterlambatan (ta'zir). Apabila ANGGOTA mengalami kesulitan membayar,
+                    para pihak bermusyawarah untuk mencari penyelesaian, termasuk penjadwalan kembali sesuai Pasal 8.</p>
+
+                <h6>Pasal 8: Penjadwalan Kembali</h6>
+                <p>Atas kesepakatan para pihak, jadwal, jangka waktu, atau besar angsuran dapat diubah tanpa menambah sisa utang ANGGOTA.
+                    Biaya yang dapat dibebankan hanya biaya riil yang benar-benar dikeluarkan.</p>
+
+                <h6>Pasal 9: Penyelesaian Perselisihan</h6>
+                <p>Perselisihan diselesaikan secara musyawarah untuk mufakat. Apabila tidak tercapai, para pihak sepakat menyelesaikannya
+                    melalui Pengadilan Agama sesuai peraturan perundang-undangan yang berlaku.</p>
+
+                <div style="page-break-inside: avoid;">
+                    <h6>Pasal 10: Penutup</h6>
+                    <p>ANGGOTA menyatakan telah diberi waktu yang cukup untuk membaca, telah memahami, dan menyetujui seluruh isi akad ini.
+                        Jadwal Angsuran terlampir merupakan bagian yang tidak terpisahkan dari akad ini. Akad dibuat rangkap dua dengan kekuatan
+                        hukum yang sama, satu untuk KOPERASI dan satu untuk ANGGOTA.</p>
+
+                    <table class="table table-borderless" style="width: 100%; margin-top: 20px; page-break-inside: avoid;">
+                        <tr>
+                            <td class="text-center" style="width: 50%;">KOPERASI<br/><br/><br/><br/><br/>
+                                <strong t-out="v['signatory'] or v['dots']"/><br/><t t-out="v['signatory_title']"/></td>
+                            <td class="text-center" style="width: 50%;">ANGGOTA<br/><span class="small text-muted">(meterai)</span><br/><br/><br/><br/>
+                                <strong t-out="o.partner_id.name"/></td>
+                        </tr>
+                        <tr>
+                            <td class="text-center pt-4">Saksi 1<br/><br/><br/><br/><t t-out="v['dots']"/></td>
+                            <td class="text-center pt-4">Saksi 2<br/><br/><br/><br/><t t-out="v['dots']"/></td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div style="page-break-before: always;"/>
+                <t t-call="koperasi_murabahah.doc_draft_banner"/>
+                <h5 class="text-center">Lampiran: Jadwal Angsuran</h5>
+                <p class="text-center">Akad No. <t t-out="o.name"/> | <t t-out="o.partner_id.name"/> | <t t-out="o.product_desc"/></p>
+                <table class="table table-sm table-bordered" style="width: 100%;">
+                    <thead>
+                        <tr><th class="text-center">Ke-</th><th>Jatuh Tempo</th><th class="text-end">Pokok</th>
+                            <th class="text-end">Margin</th><th class="text-end">Angsuran</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr t-foreach="v['lines']" t-as="line">
+                            <td class="text-center" t-out="line['no']"/>
+                            <td t-out="line['date']"/>
+                            <td class="text-end" t-out="line['principal']"/>
+                            <td class="text-end" t-out="line['margin']"/>
+                            <td class="text-end" t-out="line['total']"/>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr><th colspan="4">Total (= utang ANGGOTA)</th><th class="text-end" t-out="v['total_lines']"/></tr>
+                    </tfoot>
+                </table>
+            </div>
+        </t>
+    </template>
+
+    <template id="report_akad_murabahah">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="koperasi_murabahah.report_akad_murabahah_document"/>
+            </t>
+        </t>
+    </template>
+
+    <!-- ============================================================ -->
+    <!-- Surat Pengakuan Utang                                        -->
+    <!-- ============================================================ -->
+    <template id="report_pengakuan_utang_document">
+        <t t-call="web.external_layout">
+            <t t-set="v" t-value="o.get_document_values()"/>
+            <div class="page" style="font-size: 11pt;">
+                <t t-call="koperasi_murabahah.doc_draft_banner"/>
+                <h4 class="text-center mb-0">SURAT PENGAKUAN UTANG MURABAHAH</h4>
+                <p class="text-center">No. <t t-out="o.name"/>/SPU</p>
+
+                <p>Yang bertanda tangan di bawah ini:</p>
+                <table class="table table-sm table-borderless" style="width: 100%;">
+                    <tr><td style="width: 25%;">Nama</td><td>: <t t-out="o.partner_id.name"/></td></tr>
+                    <tr><td>No. Anggota</td><td>: <t t-out="v['member_no']"/></td></tr>
+                    <tr><td>No. KTP</td><td>: <t t-out="v['dots']"/></td></tr>
+                    <tr><td>Alamat</td><td>: <t t-out="v['partner_address']"/></td></tr>
+                    <tr><td>No. HP</td><td>: <t t-out="v['partner_phone']"/></td></tr>
+                </table>
+
+                <p>dengan ini mengakui dengan sebenarnya bahwa saya berutang kepada <strong t-out="v['company'].name"/> sebesar
+                    <strong t-out="v['financed']"/> (<em t-out="v['financed_words']"/>), yang timbul dari Akad Pembiayaan Murabahah
+                    No. <t t-out="o.name"/> tanggal <t t-out="v['date_akad'] or v['dots']"/> atas pembelian <t t-out="o.product_desc"/>,
+                    dengan harga jual <t t-out="v['sale_price']"/> dikurangi uang muka <t t-out="v['down_payment']"/>.</p>
+                <p>Utang tersebut akan saya bayar dalam <t t-out="v['count']"/> kali angsuran sebesar <t t-out="v['installment']"/> per bulan
+                    sesuai jadwal angsuran, mulai <t t-out="v['first_due'] or v['dots']"/> sampai <t t-out="v['last_due'] or v['dots']"/>.</p>
+                <p>Surat pengakuan utang ini dibuat sebagai bukti hukum dan merupakan satu kesatuan dengan akad tersebut.
+                    Surat ini tidak menambah kewajiban selain yang diatur dalam akad.</p>
+
+                <table class="table table-borderless" style="width: 100%; margin-top: 30px; page-break-inside: avoid;">
+                    <tr>
+                        <td style="width: 50%;"/>
+                        <td class="text-center" style="width: 50%;">
+                            <t t-out="v['city'] or v['dots']"/>, <t t-out="v['date_akad'] or v['dots']"/><br/>
+                            Yang membuat pengakuan,<br/><span class="small text-muted">(meterai)</span><br/><br/><br/><br/>
+                            <strong t-out="o.partner_id.name"/></td>
+                    </tr>
+                </table>
+            </div>
+        </t>
+    </template>
+
+    <template id="report_pengakuan_utang">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="koperasi_murabahah.report_pengakuan_utang_document"/>
+            </t>
+        </t>
+    </template>
+
+    <!-- ============================================================ -->
+    <!-- Berita Acara Serah Terima (2 halaman)                        -->
+    <!-- ============================================================ -->
+    <template id="report_bast_document">
+        <t t-call="web.external_layout">
+            <t t-set="v" t-value="o.get_document_values()"/>
+            <div class="page" style="font-size: 11pt;">
+                <!-- 1. Pemasok -> Koperasi -->
+                <t t-call="koperasi_murabahah.doc_draft_banner"/>
+                <h4 class="text-center mb-0">BERITA ACARA SERAH TERIMA BARANG</h4>
+                <p class="text-center">dari Pemasok kepada Koperasi | Akad No. <t t-out="o.name"/></p>
+                <p>Pada hari <t t-out="v['day_supplier_handover'] or v['dots']"/>, tanggal
+                    <t t-out="v['date_supplier_handover'] or v['dots']"/>, telah dilakukan serah terima barang dari
+                    <strong t-out="o.supplier_id.name or v['dots']"/> (<strong>PEMASOK</strong>) kepada
+                    <strong t-out="v['company'].name"/> (<strong>KOPERASI</strong>), yaitu:</p>
+                <t t-call="koperasi_murabahah.doc_spec_table"/>
+                <p>Harga perolehan: <t t-out="v['cost']"/><t t-if="o.supplier_invoice_ref">, faktur no. <t t-out="o.supplier_invoice_ref"/></t>.
+                    Sejak serah terima ini barang menjadi milik dan tanggung jawab KOPERASI.</p>
+                <table class="table table-borderless" style="width: 100%; margin-top: 20px; page-break-inside: avoid;">
+                    <tr>
+                        <td class="text-center" style="width: 50%;">Yang menyerahkan,<br/>PEMASOK<br/><br/><br/><br/>
+                            <t t-out="v['dots']"/></td>
+                        <td class="text-center" style="width: 50%;">Yang menerima,<br/>KOPERASI<br/><br/><br/><br/>
+                            <strong t-out="v['signatory'] or v['dots']"/><br/><t t-out="v['signatory_title']"/></td>
+                    </tr>
+                </table>
+
+                <!-- 2. Koperasi -> Anggota -->
+                <div style="page-break-before: always;"/>
+                <t t-call="koperasi_murabahah.doc_draft_banner"/>
+                <h4 class="text-center mb-0">BERITA ACARA SERAH TERIMA BARANG</h4>
+                <p class="text-center">dari Koperasi kepada Anggota | Akad No. <t t-out="o.name"/></p>
+                <p>Pada hari <t t-out="v['day_member_handover'] or v['dots']"/>, tanggal
+                    <t t-out="v['date_member_handover'] or v['dots']"/>, bertempat di <t t-out="o.handover_place or v['dots']"/>,
+                    <strong t-out="v['company'].name"/> (<strong>KOPERASI</strong>) menyerahkan kepada
+                    <strong t-out="o.partner_id.name"/> (<strong>ANGGOTA</strong>, No. Anggota <t t-out="v['member_no']"/>)
+                    barang yang dibeli ANGGOTA berdasarkan Akad Pembiayaan Murabahah No. <t t-out="o.name"/>, yaitu:</p>
+                <t t-call="koperasi_murabahah.doc_spec_table"/>
+                <p>ANGGOTA telah memeriksa barang dan menyatakan:</p>
+                <p>[&#160;&#160;&#160;] Barang diterima dalam kondisi baik dan sesuai spesifikasi.<br/>
+                    [&#160;&#160;&#160;] Terdapat cacat/ketidaksesuaian: <t t-out="v['dots'] + v['dots']"/></p>
+                <p class="small">Hak khiyar: ANGGOTA dapat menukar barang apabila terdapat kondisi berikut: <t t-out="o.khiyar_terms or v['dots']"/>
+                    Batasnya paling lambat <t t-out="o.khiyar_days"/> hari setelah serah terima. Dengan menyatakan barang diterima dalam kondisi baik,
+                    hak khiyar ANGGOTA berakhir.</p>
+                <table class="table table-borderless" style="width: 100%; margin-top: 20px; page-break-inside: avoid;">
+                    <tr>
+                        <td class="text-center" style="width: 50%;">Yang menyerahkan,<br/>KOPERASI<br/><br/><br/><br/>
+                            <strong t-out="v['signatory'] or v['dots']"/><br/><t t-out="v['signatory_title']"/></td>
+                        <td class="text-center" style="width: 50%;">Yang menerima,<br/>ANGGOTA<br/><br/><br/><br/>
+                            <strong t-out="o.partner_id.name"/></td>
+                    </tr>
+                </table>
+            </div>
+        </t>
+    </template>
+
+    <template id="report_bast">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="koperasi_murabahah.report_bast_document"/>
+            </t>
+        </t>
+    </template>
+
+    <!-- ============================================================ -->
+    <!-- Surat Janji Pembelian (Wa'd)                                  -->
+    <!-- ============================================================ -->
+    <template id="report_wad_document">
+        <t t-call="web.external_layout">
+            <t t-set="v" t-value="o.get_document_values()"/>
+            <div class="page" style="font-size: 11pt;">
+                <t t-call="koperasi_murabahah.doc_draft_banner"/>
+                <h4 class="text-center mb-0">SURAT JANJI PEMBELIAN (WA'D)</h4>
+                <p class="text-center">Pembiayaan Murabahah No. <t t-out="o.name"/></p>
+                <p>Yang bertanda tangan di bawah ini, <strong t-out="o.partner_id.name"/>, No. Anggota <t t-out="v['member_no']"/>,
+                    beralamat di <t t-out="v['partner_address']"/>, No. HP <t t-out="v['partner_phone']"/>, selanjutnya disebut
+                    <strong>ANGGOTA</strong>, dengan ini berjanji kepada <strong t-out="v['company'].name"/> (<strong>KOPERASI</strong>)
+                    untuk membeli barang berikut dari KOPERASI dengan akad murabahah setelah barang dimiliki KOPERASI:</p>
+                <t t-call="koperasi_murabahah.doc_spec_table"/>
+                <table class="table table-sm table-bordered" style="width: 100%;">
+                    <tr><td style="width: 55%;">Perkiraan harga perolehan</td><td class="text-end" t-out="v['cost']"/></tr>
+                    <tr><td>Uang muka (hamish jiddiyyah)</td><td class="text-end" t-out="v['down_payment']"/></tr>
+                    <tr><td>Jangka waktu angsuran yang diajukan</td><td class="text-end"><t t-out="o.tenor"/> bulan</td></tr>
+                </table>
+                <ol>
+                    <li>Janji ini mengikat ANGGOTA setelah KOPERASI mengambil tindakan untuk memperoleh barang.</li>
+                    <li>Apabila ANGGOTA tidak menepati janji ini, ANGGOTA bertanggung jawab atas kerugian KOPERASI sebesar
+                        biaya riil yang telah dikeluarkan untuk memperoleh barang.</li>
+                    <li>Uang muka adalah tanda kesungguhan. Jika janji dibatalkan, uang muka dikembalikan setelah dikurangi biaya riil
+                        yang telah dikeluarkan KOPERASI. Jika biaya riil melebihi uang muka, kekurangannya menjadi tanggungan ANGGOTA.</li>
+                    <li>Harga jual, margin, dan cara pembayaran ditetapkan dalam akad murabahah yang dibuat terpisah setelah barang
+                        dimiliki KOPERASI.</li>
+                </ol>
+                <table class="table table-borderless" style="width: 100%; margin-top: 20px; page-break-inside: avoid;">
+                    <tr>
+                        <td class="text-center" style="width: 50%;">Mengetahui,<br/>KOPERASI<br/><br/><br/><br/>
+                            <strong t-out="v['signatory'] or v['dots']"/><br/><t t-out="v['signatory_title']"/></td>
+                        <td class="text-center" style="width: 50%;">
+                            <t t-out="v['city'] or v['dots']"/>, <t t-out="v['date_wad'] or v['dots']"/><br/>ANGGOTA<br/><br/><br/><br/>
+                            <strong t-out="o.partner_id.name"/></td>
+                    </tr>
+                </table>
+            </div>
+        </t>
+    </template>
+
+    <template id="report_wad">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="koperasi_murabahah.report_wad_document"/>
+            </t>
+        </t>
+    </template>
+
+    <!-- ============================================================ -->
+    <!-- Akad Wakalah Pembelian Barang                                 -->
+    <!-- ============================================================ -->
+    <template id="report_wakalah_document">
+        <t t-call="web.external_layout">
+            <t t-set="v" t-value="o.get_document_values()"/>
+            <t t-set="wakil" t-value="o.wakil_id or o.partner_id"/>
+            <div class="page" style="font-size: 11pt;">
+                <t t-call="koperasi_murabahah.doc_draft_banner"/>
+                <div t-if="o.purchase_method != 'wakalah'" class="alert alert-warning">
+                    Akad <t t-out="o.name"/> tidak memakai wakalah (barang dibeli langsung oleh koperasi).
+                </div>
+                <h4 class="text-center mb-0">AKAD WAKALAH PEMBELIAN BARANG</h4>
+                <p class="text-center">No. <t t-out="o.name"/>/WKL</p>
+                <p>Pada hari <t t-out="v['day_wakalah'] or v['dots']"/>, tanggal <t t-out="v['date_wakalah'] or v['dots']"/>,
+                    di <t t-out="v['city'] or v['dots']"/>:</p>
+                <ol>
+                    <li><strong t-out="v['company'].name"/>, diwakili oleh <t t-out="v['signatory'] or v['dots']"/> selaku
+                        <t t-out="v['signatory_title']"/>, sebagai pemberi kuasa (<strong>MUWAKKIL</strong>).</li>
+                    <li><strong t-out="wakil.name"/>, beralamat di
+                        <t t-out="', '.join(filter(None, [wakil.street, wakil.city])) or v['dots']"/>, sebagai penerima kuasa
+                        (<strong>WAKIL</strong>).</li>
+                </ol>
+                <p>MUWAKKIL memberi kuasa kepada WAKIL untuk membeli barang berikut atas nama MUWAKKIL:</p>
+                <t t-call="koperasi_murabahah.doc_spec_table"/>
+                <table class="table table-sm table-bordered" style="width: 100%;">
+                    <tr><td style="width: 55%;">Pemasok</td><td t-out="o.supplier_id.name or v['dots']"/></tr>
+                    <tr><td>Batas harga pembelian</td><td class="text-end" t-out="v['wakalah_max_price']"/></tr>
+                </table>
+                <p><strong>Ruang lingkup:</strong> <t t-out="o.wakalah_scope or v['dots']"/></p>
+                <ol>
+                    <li>Barang yang dibeli WAKIL adalah milik MUWAKKIL sampai akad murabahah ditandatangani.</li>
+                    <li>WAKIL menyerahkan barang dan bukti pembelian (faktur/nota) kepada MUWAKKIL.</li>
+                    <li>WAKIL tidak menanggung risiko kerugian dalam proses pembelian, kecuali WAKIL menyalahi kewenangan (ta'addi),
+                        lalai (taqshir), atau melanggar kesepakatan.</li>
+                    <li>Akad ini dibuat sebelum dan terpisah dari akad murabahah. Akad murabahah dilakukan setelah barang diterima
+                        dari pemasok.</li>
+                </ol>
+                <table class="table table-borderless" style="width: 100%; margin-top: 20px; page-break-inside: avoid;">
+                    <tr>
+                        <td class="text-center" style="width: 50%;">MUWAKKIL<br/>KOPERASI<br/><br/><br/><br/>
+                            <strong t-out="v['signatory'] or v['dots']"/><br/><t t-out="v['signatory_title']"/></td>
+                        <td class="text-center" style="width: 50%;">WAKIL<br/><br/><br/><br/><br/>
+                            <strong t-out="wakil.name"/></td>
+                    </tr>
+                </table>
+            </div>
+        </t>
+    </template>
+
+    <template id="report_wakalah">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="koperasi_murabahah.report_wakalah_document"/>
+            </t>
+        </t>
+    </template>
+    <!-- ============================================================ -->
+    <!-- Surat Penjaminan (Kafalah), Fatwa DSN-MUI 11/2000             -->    <!-- ============================================================ -->
+    <template id="report_penjaminan_document">
+        <t t-call="web.external_layout">
+            <t t-set="v" t-value="o.get_document_values()"/>
+            <div class="page" style="font-size: 11pt;">
+                <t t-call="koperasi_murabahah.doc_draft_banner"/>
+                <h4 class="text-center mb-0">SURAT PENJAMINAN (KAFALAH)</h4>
+                <p class="text-center">No. <t t-out="o.name"/>/KFL</p>
+
+                <p>Yang bertanda tangan di bawah ini:</p>
+                <table class="table table-sm table-borderless" style="width: 100%;">
+                    <tr><td style="width: 25%;">Nama</td><td>: <t t-out="o.penjamin_id.name or v['dots']"/></td></tr>
+                    <tr><td>No. Anggota</td><td>: <t t-out="o.penjamin_id.koperasi_member_no or v['dots']"/></td></tr>
+                    <tr><td>No. KTP</td><td>: <t t-out="v['dots']"/></td></tr>
+                    <tr><td>Alamat</td><td>: <t t-out="v['penjamin_address']"/></td></tr>
+                    <tr><td>No. HP</td><td>: <t t-out="v['penjamin_phone']"/></td></tr>
+                    <tr><td>Hubungan dengan Anggota</td><td>: <t t-out="o.penjamin_relation or v['dots']"/></td></tr>
+                </table>
+                <p>selanjutnya disebut <strong>PENJAMIN</strong>, dengan ini menyatakan menjamin (kafalah) pembayaran kewajiban:</p>
+                <table class="table table-sm table-borderless" style="width: 100%;">
+                    <tr><td style="width: 25%;">Nama</td><td>: <t t-out="o.partner_id.name"/></td></tr>
+                    <tr><td>Alamat</td><td>: <t t-out="v['partner_address']"/></td></tr>
+                    <tr><td>Akad</td><td>: Pembiayaan Murabahah No. <t t-out="o.name"/>, atas pembelian <t t-out="o.product_desc"/></td></tr>
+                    <tr><td>Kewajiban</td><td>: <t t-out="v['financed']"/> (<em t-out="v['financed_words']"/>), dibayar
+                        <t t-out="v['count']"/> kali angsuran <t t-out="v['installment']"/> per bulan</td></tr>
+                </table>
+                <p>selanjutnya disebut <strong>ANGGOTA</strong>, kepada <strong t-out="v['company'].name"/> (KOPERASI), dengan ketentuan:</p>
+                <ol>
+                    <li>PENJAMIN mengetahui dan memahami isi Akad Pembiayaan Murabahah tersebut, termasuk harga jual, jadwal angsuran, dan agunannya.</li>
+                    <li>Apabila ANGGOTA tidak membayar angsuran yang telah jatuh tempo dan tidak menyelesaikannya setelah diberi surat peringatan
+                        oleh KOPERASI, PENJAMIN bersedia membayar angsuran yang tertunggak, dan bila akad dinyatakan jatuh tempo seluruhnya,
+                        membayar sisa kewajiban ANGGOTA, paling banyak sebesar sisa kewajiban menurut akad.</li>
+                    <li>Penjaminan ini tidak menambah kewajiban ANGGOTA dan tidak memberi KOPERASI hak menagih lebih dari sisa kewajiban.
+                        KOPERASI tidak memberikan imbalan kepada PENJAMIN.</li>
+                    <li>Pembayaran oleh PENJAMIN menjadi piutang PENJAMIN kepada ANGGOTA, yang dapat ditagih kembali oleh PENJAMIN kepada ANGGOTA.</li>
+                    <li>KOPERASI menagih ANGGOTA terlebih dahulu dan menggunakan agunan sesuai akad sebelum atau bersamaan dengan penagihan
+                        kepada PENJAMIN, dengan cara yang baik dan tidak mempermalukan.</li>
+                    <li>Penjaminan berakhir setelah seluruh kewajiban ANGGOTA berdasarkan akad tersebut lunas.</li>
+                </ol>
+                <p>Surat ini dibuat dengan sadar tanpa paksaan, dan merupakan satu kesatuan dengan akad tersebut.</p>
+
+                <table class="table table-borderless" style="width: 100%; margin-top: 20px; page-break-inside: avoid;">
+                    <tr>
+                        <td colspan="3" class="text-end"><t t-out="v['city'] or v['dots']"/>, <t t-out="v['date_akad'] or v['dots']"/></td>
+                    </tr>
+                    <tr class="text-center">
+                        <td style="width: 33%;">KOPERASI<br/><br/><br/><br/><br/>
+                            <strong t-out="v['signatory'] or v['dots']"/><br/><t t-out="v['signatory_title']"/></td>
+                        <td style="width: 33%;">ANGGOTA<br/><br/><br/><br/><br/><strong t-out="o.partner_id.name"/></td>
+                        <td style="width: 33%;">PENJAMIN<br/><span class="small text-muted">(meterai)</span><br/><br/><br/><br/>
+                            <strong t-out="o.penjamin_id.name or v['dots']"/></td>
+                    </tr>
+                </table>
+            </div>
+        </t>
+    </template>
+
+    <template id="report_penjaminan">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="koperasi_murabahah.report_penjaminan_document"/>
+            </t>
+        </t>
+    </template>
+</odoo>

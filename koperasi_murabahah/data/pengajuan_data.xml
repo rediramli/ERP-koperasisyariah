@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="kategori_motor" model="koperasi.pembiayaan.kategori">
+        <field name="name">Sepeda Motor</field>
+        <field name="sequence">10</field>
+        <field name="margin_pct">25</field>
+        <field name="min_dp_pct">20</field>
+        <field name="max_tenor">24</field>
+        <field name="is_vehicle" eval="True"/>
+        <field name="note">Usulan SOP K3: DP ≥ 20%, tenor ≤ 24 bulan, margin motor 25% (data Excel).</field>
+    </record>
+    <record id="kategori_mobil" model="koperasi.pembiayaan.kategori">
+        <field name="name">Mobil</field>
+        <field name="sequence">20</field>
+        <field name="margin_pct">20</field>
+        <field name="min_dp_pct">25</field>
+        <field name="max_tenor">36</field>
+        <field name="is_vehicle" eval="True"/>
+        <field name="note">Usulan: DP ≥ 25%, tenor ≤ 36 bulan.</field>
+    </record>
+    <record id="kategori_elektronik" model="koperasi.pembiayaan.kategori">
+        <field name="name">Elektronik &amp; HP</field>
+        <field name="sequence">30</field>
+        <field name="margin_pct">20</field>
+        <field name="min_dp_pct">10</field>
+        <field name="max_tenor">12</field>
+        <field name="is_vehicle" eval="False"/>
+        <field name="note">Usulan: DP ≥ 10%, tenor ≤ 12 bulan.</field>
+    </record>
+    <record id="kategori_rumah_tangga" model="koperasi.pembiayaan.kategori">
+        <field name="name">Perabot &amp; Kebutuhan Rumah Tangga</field>
+        <field name="sequence">40</field>
+        <field name="margin_pct">20</field>
+        <field name="min_dp_pct">10</field>
+        <field name="max_tenor">12</field>
+        <field name="is_vehicle" eval="False"/>
+        <field name="note"></field>
+    </record>
+    <record id="kategori_usaha" model="koperasi.pembiayaan.kategori">
+        <field name="name">Barang Usaha / Modal Kerja Barang</field>
+        <field name="sequence">50</field>
+        <field name="margin_pct">20</field>
+        <field name="min_dp_pct">0</field>
+        <field name="max_tenor">24</field>
+        <field name="is_vehicle" eval="False"/>
+        <field name="note">Pembelian barang untuk usaha (bukan uang tunai).</field>
+    </record>
+    <record id="kategori_lainnya" model="koperasi.pembiayaan.kategori">
+        <field name="name">Lainnya</field>
+        <field name="sequence">90</field>
+        <field name="margin_pct">20</field>
+        <field name="min_dp_pct">0</field>
+        <field name="max_tenor">24</field>
+        <field name="is_vehicle" eval="False"/>
+        <field name="note"></field>
+    </record>
+    <record id="dokumen_ktp" model="koperasi.dokumen.jenis">
+        <field name="code">ktp</field>
+        <field name="name">KTP pemohon</field>
+        <field name="phase">pengajuan</field>
+        <field name="sequence">10</field>
+        <field name="required" eval="True"/>
+        <field name="original_check" eval="True"/>
+        <field name="spouse_only" eval="False"/>
+        <field name="vehicle_only" eval="False"/>
+        <field name="description">Cocokkan NIK, nama, tanggal lahir dengan KK; foto KTP cocok dengan wajah.</field>
+    </record>
+    <record id="dokumen_kk" model="koperasi.dokumen.jenis">
+        <field name="code">kk</field>
+        <field name="name">Kartu Keluarga</field>
+        <field name="phase">pengajuan</field>
+        <field name="sequence">20</field>
+        <field name="required" eval="True"/>
+        <field name="original_check" eval="True"/>
+        <field name="spouse_only" eval="False"/>
+        <field name="vehicle_only" eval="False"/>
+        <field name="description">Status keluarga, tanggungan, pasangan.</field>
+    </record>
+    <record id="dokumen_selfie_ktp" model="koperasi.dokumen.jenis">
+        <field name="code">selfie_ktp</field>
+        <field name="name">Foto pemohon memegang KTP</field>
+        <field name="phase">pengajuan</field>
+        <field name="sequence">30</field>
+        <field name="required" eval="True"/>
+        <field name="original_check" eval="False"/>
+        <field name="spouse_only" eval="False"/>
+        <field name="vehicle_only" eval="False"/>
+        <field name="description">Diambil petugas saat bertemu.</field>
+    </record>
+    <record id="dokumen_ktp_pasangan" model="koperasi.dokumen.jenis">
+        <field name="code">ktp_pasangan</field>
+        <field name="name">KTP pasangan</field>
+        <field name="phase">pengajuan</field>
+        <field name="sequence">40</field>
+        <field name="required" eval="True"/>
+        <field name="original_check" eval="True"/>
+        <field name="spouse_only" eval="True"/>
+        <field name="vehicle_only" eval="False"/>
+        <field name="description"></field>
+    </record>
+    <record id="dokumen_penghasilan" model="koperasi.dokumen.jenis">
+        <field name="code">penghasilan</field>
+        <field name="name">Bukti penghasilan (slip gaji 3 bulan / mutasi rekening 3 bulan / keterangan usaha)</field>
+        <field name="phase">pengajuan</field>
+        <field name="sequence">50</field>
+        <field name="required" eval="True"/>
+        <field name="original_check" eval="True"/>
+        <field name="spouse_only" eval="False"/>
+        <field name="vehicle_only" eval="False"/>
+        <field name="description"></field>
+    </record>
+    <record id="dokumen_ket_kerja" model="koperasi.dokumen.jenis">
+        <field name="code">ket_kerja</field>
+        <field name="name">Surat keterangan kerja / ID karyawan / foto usaha</field>
+        <field name="phase">pengajuan</field>
+        <field name="sequence">60</field>
+        <field name="required" eval="False"/>
+        <field name="original_check" eval="False"/>
+        <field name="spouse_only" eval="False"/>
+        <field name="vehicle_only" eval="False"/>
+        <field name="description">Atau konfirmasi telepon ke kantor.</field>
+    </record>
+    <record id="dokumen_slik" model="koperasi.dokumen.jenis">
+        <field name="code">slik</field>
+        <field name="name">iDeb SLIK OJK (dicetak pemohon di iDebku)</field>
+        <field name="phase">pengajuan</field>
+        <field name="sequence">70</field>
+        <field name="required" eval="True"/>
+        <field name="original_check" eval="False"/>
+        <field name="spouse_only" eval="False"/>
+        <field name="vehicle_only" eval="False"/>
+        <field name="description">Koperasi bukan pelapor SLIK; pemohon mencetak sendiri (gratis). Boleh "tidak berlaku" dengan alasan sampai pengurus menetapkan K6.</field>
+    </record>
+    <record id="dokumen_domisili" model="koperasi.dokumen.jenis">
+        <field name="code">domisili</field>
+        <field name="name">Bukti domisili (bila alamat beda dengan KTP)</field>
+        <field name="phase">pengajuan</field>
+        <field name="sequence">80</field>
+        <field name="required" eval="False"/>
+        <field name="original_check" eval="True"/>
+        <field name="spouse_only" eval="False"/>
+        <field name="vehicle_only" eval="False"/>
+        <field name="description">Rekening listrik/air, surat RT, kontrak sewa.</field>
+    </record>
+    <record id="dokumen_penawaran" model="koperasi.dokumen.jenis">
+        <field name="code">penawaran</field>
+        <field name="name">Penawaran harga dari dealer/penjual</field>
+        <field name="phase">pengajuan</field>
+        <field name="sequence">90</field>
+        <field name="required" eval="True"/>
+        <field name="original_check" eval="False"/>
+        <field name="spouse_only" eval="False"/>
+        <field name="vehicle_only" eval="False"/>
+        <field name="description">Tipe, warna, harga OTR/harga jual, diskon, biaya.</field>
+    </record>
+    <record id="dokumen_pembanding" model="koperasi.dokumen.jenis">
+        <field name="code">pembanding</field>
+        <field name="name">Pembanding harga (dealer lain / situs resmi)</field>
+        <field name="phase">pengajuan</field>
+        <field name="sequence">100</field>
+        <field name="required" eval="False"/>
+        <field name="original_check" eval="False"/>
+        <field name="spouse_only" eval="False"/>
+        <field name="vehicle_only" eval="False"/>
+        <field name="description"></field>
+    </record>
+    <record id="dokumen_foto_survei" model="koperasi.dokumen.jenis">
+        <field name="code">foto_survei</field>
+        <field name="name">Foto survei (depan rumah dengan nomor, pemohon di lokasi)</field>
+        <field name="phase">pengajuan</field>
+        <field name="sequence">110</field>
+        <field name="required" eval="False"/>
+        <field name="original_check" eval="False"/>
+        <field name="spouse_only" eval="False"/>
+        <field name="vehicle_only" eval="False"/>
+        <field name="description"></field>
+    </record>
+    <record id="dokumen_persetujuan_pasangan" model="koperasi.dokumen.jenis">
+        <field name="code">persetujuan_pasangan</field>
+        <field name="name">Surat persetujuan pasangan</field>
+        <field name="phase">akad</field>
+        <field name="sequence">10</field>
+        <field name="required" eval="True"/>
+        <field name="original_check" eval="True"/>
+        <field name="spouse_only" eval="True"/>
+        <field name="vehicle_only" eval="False"/>
+        <field name="description">Ditandatangani pasangan saat akad.</field>
+    </record>
+    <record id="dokumen_wad" model="koperasi.dokumen.jenis">
+        <field name="code">wad</field>
+        <field name="name">Surat janji pembelian (wa'd) bertanda tangan</field>
+        <field name="phase">akad</field>
+        <field name="sequence">20</field>
+        <field name="required" eval="True"/>
+        <field name="original_check" eval="True"/>
+        <field name="spouse_only" eval="False"/>
+        <field name="vehicle_only" eval="False"/>
+        <field name="description"></field>
+    </record>
+    <record id="dokumen_bukti_dp" model="koperasi.dokumen.jenis">
+        <field name="code">bukti_dp</field>
+        <field name="name">Bukti uang muka</field>
+        <field name="phase">akad</field>
+        <field name="sequence">30</field>
+        <field name="required" eval="False"/>
+        <field name="original_check" eval="False"/>
+        <field name="spouse_only" eval="False"/>
+        <field name="vehicle_only" eval="False"/>
+        <field name="description"></field>
+    </record>
+    <record id="dokumen_faktur" model="koperasi.dokumen.jenis">
+        <field name="code">faktur</field>
+        <field name="name">Faktur / kuitansi pemasok atas nama koperasi</field>
+        <field name="phase">akad</field>
+        <field name="sequence">40</field>
+        <field name="required" eval="True"/>
+        <field name="original_check" eval="True"/>
+        <field name="spouse_only" eval="False"/>
+        <field name="vehicle_only" eval="False"/>
+        <field name="description"></field>
+    </record>
+    <record id="dokumen_bukti_bayar_pemasok" model="koperasi.dokumen.jenis">
+        <field name="code">bukti_bayar_pemasok</field>
+        <field name="name">Bukti transfer ke rekening pemasok</field>
+        <field name="phase">akad</field>
+        <field name="sequence">50</field>
+        <field name="required" eval="True"/>
+        <field name="original_check" eval="False"/>
+        <field name="spouse_only" eval="False"/>
+        <field name="vehicle_only" eval="False"/>
+        <field name="description">Dana tidak boleh lewat rekening pemohon.</field>
+    </record>
+    <record id="dokumen_akad_ttd" model="koperasi.dokumen.jenis">
+        <field name="code">akad_ttd</field>
+        <field name="name">Akad, Surat Pengakuan Utang, BAST bertanda tangan</field>
+        <field name="phase">akad</field>
+        <field name="sequence">60</field>
+        <field name="required" eval="True"/>
+        <field name="original_check" eval="True"/>
+        <field name="spouse_only" eval="False"/>
+        <field name="vehicle_only" eval="False"/>
+        <field name="description"></field>
+    </record>
+    <record id="dokumen_foto_serah_terima" model="koperasi.dokumen.jenis">
+        <field name="code">foto_serah_terima</field>
+        <field name="name">Foto serah terima barang (no. rangka/mesin/IMEI terlihat)</field>
+        <field name="phase">akad</field>
+        <field name="sequence">70</field>
+        <field name="required" eval="True"/>
+        <field name="original_check" eval="False"/>
+        <field name="spouse_only" eval="False"/>
+        <field name="vehicle_only" eval="False"/>
+        <field name="description"></field>
+    </record>
+    <record id="dokumen_bpkb" model="koperasi.dokumen.jenis">
+        <field name="code">bpkb</field>
+        <field name="name">BPKB asli (disimpan koperasi)</field>
+        <field name="phase">menyusul</field>
+        <field name="sequence">10</field>
+        <field name="required" eval="True"/>
+        <field name="original_check" eval="True"/>
+        <field name="spouse_only" eval="False"/>
+        <field name="vehicle_only" eval="True"/>
+        <field name="description">Catat juga sebagai Agunan.</field>
+    </record>
+    <record id="dokumen_stnk" model="koperasi.dokumen.jenis">
+        <field name="code">stnk</field>
+        <field name="name">Salinan STNK</field>
+        <field name="phase">menyusul</field>
+        <field name="sequence">20</field>
+        <field name="required" eval="True"/>
+        <field name="original_check" eval="False"/>
+        <field name="spouse_only" eval="False"/>
+        <field name="vehicle_only" eval="True"/>
+        <field name="description"></field>
+    </record>
+    <record id="dokumen_polis" model="koperasi.dokumen.jenis">
+        <field name="code">polis</field>
+        <field name="name">Polis asuransi kendaraan</field>
+        <field name="phase">menyusul</field>
+        <field name="sequence">30</field>
+        <field name="required" eval="False"/>
+        <field name="original_check" eval="False"/>
+        <field name="spouse_only" eval="False"/>
+        <field name="vehicle_only" eval="True"/>
+        <field name="description">SOP K5.</field>
+    </record>
+    <record id="dokumen_fidusia" model="koperasi.dokumen.jenis">
+        <field name="code">fidusia</field>
+        <field name="name">Sertifikat jaminan fidusia</field>
+        <field name="phase">menyusul</field>
+        <field name="sequence">40</field>
+        <field name="required" eval="False"/>
+        <field name="original_check" eval="False"/>
+        <field name="spouse_only" eval="False"/>
+        <field name="vehicle_only" eval="True"/>
+        <field name="description">SOP K4.</field>
+    </record>
+    <record id="dokumen_ktp_penjamin" model="koperasi.dokumen.jenis">
+        <field name="code">ktp_penjamin</field>
+        <field name="name">KTP penjamin (anggota)</field>
+        <field name="phase">pengajuan</field>
+        <field name="sequence">45</field>
+        <field name="required" eval="True"/>
+        <field name="original_check" eval="True"/>
+        <field name="guarantor_only" eval="True"/>
+        <field name="description">Penjamin wajib anggota aktif, tidak menunggak. Konfirmasi langsung kesediaannya.</field>
+    </record>
+    <record id="dokumen_surat_penjaminan" model="koperasi.dokumen.jenis">
+        <field name="code">surat_penjaminan</field>
+        <field name="name">Surat Penjaminan (kafalah) bertanda tangan penjamin</field>
+        <field name="phase">akad</field>
+        <field name="sequence">15</field>
+        <field name="required" eval="True"/>
+        <field name="original_check" eval="True"/>
+        <field name="guarantor_only" eval="True"/>
+        <field name="description">Dicetak dari akad: Cetak → Surat Penjaminan.</field>
+    </record>
+</odoo>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_reschedule_wizard_form" model="ir.ui.view">
+        <field name="name">koperasi.murabahah.reschedule.wizard.form</field>
+        <field name="model">koperasi.murabahah.reschedule.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Penjadwalan Kembali">
+                <p class="text-muted">
+                    Penjadwalan kembali (Fatwa DSN-MUI 48/2005): sisa piutang dan sisa margin dibagi ulang ke jadwal baru,
+                    <strong>tidak bertambah</strong>. Angsuran yang sudah lunas tidak berubah. Tidak ada jurnal baru.
+                    Harus disepakati koperasi dan anggota.
+                </p>
+                <group>
+                    <group string="Kondisi Sekarang">
+                        <field name="akad_id"/>
+                        <field name="partner_id"/>
+                        <field name="remaining_receivable"/>
+                        <field name="remaining_principal"/>
+                        <field name="remaining_margin"/>
+                        <field name="arrears_amount"/>
+                        <field name="arrears_days"/>
+                        <field name="collectibility" widget="badge"/>
+                        <field name="reschedule_count" invisible="not reschedule_count"/>
+                    </group>
+                    <group string="Jadwal Baru">
+                        <field name="date"/>
+                        <field name="first_due_date"/>
+                        <field name="mode" widget="radio"/>
+                        <field name="new_count" invisible="mode != 'count'" required="mode == 'count'"/>
+                        <field name="new_installment" invisible="mode != 'amount'" required="mode == 'amount'"/>
+                        <field name="plan_count" invisible="plan_error"/>
+                        <field name="plan_installment" invisible="plan_error"/>
+                        <field name="plan_last_due" invisible="plan_error"/>
+                    </group>
+                </group>
+                <field name="reason" placeholder="Alasan dan dasar persetujuan, mis. kesepakatan dengan anggota tanggal ..."/>
+                <div class="alert alert-warning mt-2" role="alert" invisible="not plan_error">
+                    <field name="plan_error" readonly="1"/>
+                </div>
+                <field name="preview" readonly="1" invisible="plan_error"/>
+                <field name="currency_id" invisible="1"/>
+                <field name="company_id" invisible="1"/>
+                <footer>
+                    <button name="action_confirm" type="object" string="Simpan Jadwal Baru" class="btn-primary"
+                            invisible="plan_error"
+                            confirm="Jadwal angsuran yang belum dibayar akan diganti dengan jadwal baru. Lanjutkan?"/>
+                    <button string="Batal" special="cancel" class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

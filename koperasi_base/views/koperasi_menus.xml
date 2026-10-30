@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_koperasi_root"
+              name="Koperasi"
+              web_icon="koperasi_base,static/description/icon.png"
+              groups="group_koperasi_petugas,group_koperasi_akuntan"
+              sequence="5"/>
+
+    <menuitem id="menu_koperasi_member_root" name="Anggota" parent="menu_koperasi_root" sequence="10"/>
+    <menuitem id="menu_koperasi_member" name="Anggota" parent="menu_koperasi_member_root"
+              action="action_koperasi_member" sequence="10"/>
+    <menuitem id="menu_koperasi_partner_all" name="Semua Kontak" parent="menu_koperasi_member_root"
+              action="action_koperasi_partner_all" sequence="20"/>
+
+    <menuitem id="menu_koperasi_report" name="Laporan" parent="menu_koperasi_root" sequence="80"/>
+    <menuitem id="menu_koperasi_config" name="Konfigurasi" parent="menu_koperasi_root" sequence="90"
+              groups="group_koperasi_akuntan,group_koperasi_pengurus"/>
+</odoo>

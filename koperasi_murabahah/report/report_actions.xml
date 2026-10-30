@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_report_kartu_angsuran" model="ir.actions.report">
+        <field name="name">Kartu Angsuran</field>
+        <field name="model">koperasi.murabahah.akad</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">koperasi_murabahah.report_kartu_angsuran</field>
+        <field name="print_report_name">'Kartu Angsuran - %s - %s' % (object.name, object.partner_id.name)</field>
+        <field name="binding_model_id" ref="model_koperasi_murabahah_akad"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <record id="action_report_akad_list" model="ir.actions.report">
+        <field name="name">Daftar Akad (Sisa Piutang &amp; Kolektibilitas)</field>
+        <field name="model">koperasi.murabahah.akad</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">koperasi_murabahah.report_akad_list</field>
+        <field name="print_report_name">'Daftar Akad Murabahah'</field>
+        <field name="binding_model_id" ref="model_koperasi_murabahah_akad"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <record id="action_report_akad_murabahah" model="ir.actions.report">
+        <field name="name">Akad Murabahah</field>
+        <field name="model">koperasi.murabahah.akad</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">koperasi_murabahah.report_akad_murabahah</field>
+        <field name="print_report_name">'Akad Murabahah - %s - %s' % (object.name, object.partner_id.name)</field>
+        <field name="binding_model_id" ref="model_koperasi_murabahah_akad"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <record id="action_report_pengakuan_utang" model="ir.actions.report">
+        <field name="name">Surat Pengakuan Utang</field>
+        <field name="model">koperasi.murabahah.akad</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">koperasi_murabahah.report_pengakuan_utang</field>
+        <field name="print_report_name">'Surat Pengakuan Utang - %s - %s' % (object.name, object.partner_id.name)</field>
+        <field name="binding_model_id" ref="model_koperasi_murabahah_akad"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <record id="action_report_bast" model="ir.actions.report">
+        <field name="name">Berita Acara Serah Terima</field>
+        <field name="model">koperasi.murabahah.akad</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">koperasi_murabahah.report_bast</field>
+        <field name="print_report_name">'BAST - %s - %s' % (object.name, object.partner_id.name)</field>
+        <field name="binding_model_id" ref="model_koperasi_murabahah_akad"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <record id="action_report_wad" model="ir.actions.report">
+        <field name="name">Surat Janji Pembelian (Wa'd)</field>
+        <field name="model">koperasi.murabahah.akad</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">koperasi_murabahah.report_wad</field>
+        <field name="print_report_name">'Wad - %s - %s' % (object.name, object.partner_id.name)</field>
+        <field name="binding_model_id" ref="model_koperasi_murabahah_akad"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <record id="action_report_wakalah" model="ir.actions.report">
+        <field name="name">Akad Wakalah</field>
+        <field name="model">koperasi.murabahah.akad</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">koperasi_murabahah.report_wakalah</field>
+        <field name="print_report_name">'Wakalah - %s - %s' % (object.name, object.partner_id.name)</field>
+        <field name="binding_model_id" ref="model_koperasi_murabahah_akad"/>
+        <field name="binding_type">report</field>
+    </record>
+    <record id="action_report_penjaminan" model="ir.actions.report">
+        <field name="name">Surat Penjaminan (Kafalah)</field>
+        <field name="model">koperasi.murabahah.akad</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">koperasi_murabahah.report_penjaminan</field>
+        <field name="print_report_name">'Surat Penjaminan - %s - %s' % (object.name, object.penjamin_id.name or '')</field>
+        <field name="binding_model_id" ref="model_koperasi_murabahah_akad"/>
+        <field name="binding_type">report</field>
+    </record>
+</odoo>

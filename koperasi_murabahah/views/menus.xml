@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_murabahah_root" name="Murabahah" parent="koperasi_base.menu_koperasi_root" sequence="20"/>
+    <menuitem id="menu_murabahah_pengajuan" name="Pengajuan" parent="menu_murabahah_root" action="action_pengajuan"
+              sequence="5"/>
+    <menuitem id="menu_murabahah_akad" name="Akad" parent="menu_murabahah_root" action="action_akad" sequence="10"/>
+    <menuitem id="menu_murabahah_angsuran" name="Jadwal Angsuran" parent="menu_murabahah_root"
+              action="action_angsuran" sequence="20"/>
+    <menuitem id="menu_murabahah_payment" name="Pembayaran Angsuran" parent="menu_murabahah_root"
+              action="action_payment" sequence="30"/>
+    <menuitem id="menu_murabahah_reschedule" name="Restrukturisasi" parent="menu_murabahah_root"
+              action="action_reschedule" sequence="40"/>
+    <menuitem id="menu_murabahah_agunan" name="Agunan" parent="menu_murabahah_root"
+              action="action_agunan" sequence="45"/>
+
+    <menuitem id="menu_koperasi_ringkasan" name="Ringkasan Koperasi" parent="koperasi_base.menu_koperasi_report"
+              action="action_koperasi_ringkasan" sequence="5"
+              groups="koperasi_base.group_koperasi_akuntan,koperasi_base.group_koperasi_pengurus"/>
+    <menuitem id="menu_murabahah_report_active" name="Daftar Akad Aktif" parent="koperasi_base.menu_koperasi_report"
+              action="action_akad_active_report" sequence="10"/>
+    <menuitem id="menu_murabahah_report_overdue" name="Daftar Tunggakan" parent="koperasi_base.menu_koperasi_report"
+              action="action_angsuran_overdue" sequence="20"/>
+    <menuitem id="menu_murabahah_report_margin" name="Rekap Pendapatan Margin" parent="koperasi_base.menu_koperasi_report"
+              action="action_margin_recap" sequence="30"
+              groups="koperasi_base.group_koperasi_akuntan,koperasi_base.group_koperasi_pengurus"/>
+
+    <menuitem id="menu_murabahah_settings" name="Pengaturan" parent="koperasi_base.menu_koperasi_config"
+              action="action_murabahah_settings" sequence="10" groups="koperasi_base.group_koperasi_akuntan"/>
+    <menuitem id="menu_pembiayaan_kategori" name="Kategori Pembiayaan" parent="koperasi_base.menu_koperasi_config"
+              action="action_kategori" sequence="12"
+              groups="koperasi_base.group_koperasi_akuntan,koperasi_base.group_koperasi_pengurus"/>
+    <menuitem id="menu_dokumen_jenis" name="Checklist Dokumen" parent="koperasi_base.menu_koperasi_config"
+              action="action_dokumen_jenis" sequence="14"
+              groups="koperasi_base.group_koperasi_akuntan,koperasi_base.group_koperasi_pengurus"/>
+    <menuitem id="menu_murabahah_import" name="Import Akad Berjalan" parent="koperasi_base.menu_koperasi_config"
+              action="action_import_wizard" sequence="20" groups="koperasi_base.group_koperasi_pengurus"/>
+</odoo>

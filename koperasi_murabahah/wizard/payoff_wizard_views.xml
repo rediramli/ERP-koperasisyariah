@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_payoff_wizard_form" model="ir.ui.view">
+        <field name="name">koperasi.murabahah.payoff.wizard.form</field>
+        <field name="model">koperasi.murabahah.payoff.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Pelunasan Dipercepat">
+                <p class="text-muted">
+                    Anggota boleh melunasi sebelum jatuh tempo dan koperasi tidak boleh menghalangi. Potongan pelunasan tidak
+                    diperjanjikan di akad. Dengan metode PUPMSJT (Fatwa DSN-MUI 153/2022, pedoman OJK 2023), potongan = sisa piutang
+                    dikurangi sisa harga PUPMSJT; jika sisa PUPMSJT lebih kecil dari sisa pokok, yang ditagih sisa pokok.
+                    Jurnal potongan (PSAK 102 par. 23): Margin Ditangguhkan (D) / Piutang Murabahah (K).
+                </p>
+                <group>
+                    <group string="Akad">
+                        <field name="akad_id"/>
+                        <field name="partner_id"/>
+                        <field name="remaining_receivable"/>
+                        <field name="remaining_principal"/>
+                        <field name="remaining_margin"/>
+                    </group>
+                    <group string="Perhitungan PUPMSJT">
+                        <field name="calc_tsaman_naqdy"/>
+                        <field name="calc_months"/>
+                        <field name="calc_qimah_haliyyah"/>
+                        <field name="calc_settled"/>
+                        <field name="calc_rest"/>
+                        <field name="calc_basis"/>
+                        <field name="calc_discount"/>
+                    </group>
+                </group>
+                <group>
+                    <group string="Pelunasan">
+                        <field name="date"/>
+                        <field name="journal_id" options="{'no_create': True}"/>
+                        <field name="payoff_method" invisible="1"/>
+                        <field name="discount_policy" widget="radio"/>
+                        <field name="manual_discount" invisible="discount_policy != 'manual'"/>
+                        <field name="discount_note" invisible="discount_policy != 'manual'"
+                               required="discount_policy == 'manual'"/>
+                        <field name="discount_amount"/>
+                    </group>
+                    <group string="Lain-lain">
+                        <field name="akad_tazir_terms" invisible="1"/>
+                        <field name="amount_tazir" invisible="not akad_tazir_terms"/>
+                        <field name="tazir_confirmed" invisible="not amount_tazir"/>
+                        <field name="amount_to_pay"/>
+                        <field name="memo"/>
+                    </group>
+                </group>
+                <div class="alert alert-info" role="alert" invisible="discount_policy != 'manual' or payoff_method != 'pupmsjt'">
+                    Koperasi memakai rumus PUPMSJT. Nilai lain hanya untuk kasus yang disetujui DPS / Pengurus; isi dasarnya.
+                </div>
+                <field name="currency_id" invisible="1"/>
+                <field name="company_id" invisible="1"/>
+                <footer>
+                    <button name="action_confirm" type="object" string="Lunasi" class="btn-primary"
+                            confirm="Akad akan dilunasi dan jurnal diposting. Lanjutkan?"/>
+                    <button string="Batal" special="cancel" class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

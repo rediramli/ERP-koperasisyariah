@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Menu Navigasi Website Koperasi -->
+        <record id="menu_koperasi_home" model="website.menu">
+            <field name="name">Beranda</field>
+            <field name="url">/</field>
+            <field name="parent_id" ref="website.main_menu"/>
+            <field name="sequence" type="int">10</field>
+        </record>
+
+        <record id="menu_koperasi_simulasi" model="website.menu">
+            <field name="name">Simulasi Angsuran</field>
+            <field name="url">/simulasi</field>
+            <field name="parent_id" ref="website.main_menu"/>
+            <field name="sequence" type="int">20</field>
+        </record>
+
+        <record id="menu_koperasi_daftar" model="website.menu">
+            <field name="name">Daftar Anggota</field>
+            <field name="url">/daftar</field>
+            <field name="parent_id" ref="website.main_menu"/>
+            <field name="sequence" type="int">30</field>
+        </record>
+
+        <record id="menu_koperasi_pengajuan" model="website.menu">
+            <field name="name">Ajukan Pembiayaan</field>
+            <field name="url">/pengajuan</field>
+            <field name="parent_id" ref="website.main_menu"/>
+            <field name="sequence" type="int">40</field>
+        </record>
+    </data>
+</odoo>

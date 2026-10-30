@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="seq_murabahah_akad" model="ir.sequence">
+        <field name="name">Akad Murabahah</field>
+        <field name="code">koperasi.murabahah.akad</field>
+        <field name="prefix">MRB/%(year)s/</field>
+        <field name="padding">4</field>
+        <field name="implementation">no_gap</field>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="seq_murabahah_payment" model="ir.sequence">
+        <field name="name">Pembayaran Murabahah</field>
+        <field name="code">koperasi.murabahah.payment</field>
+        <field name="prefix">ANG/%(year)s/</field>
+        <field name="padding">5</field>
+        <field name="implementation">no_gap</field>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="seq_murabahah_pengajuan" model="ir.sequence">
+        <field name="name">Pengajuan Pembiayaan</field>
+        <field name="code">koperasi.murabahah.pengajuan</field>
+        <field name="prefix">PGJ/%(year)s/</field>
+        <field name="padding">4</field>
+        <field name="implementation">no_gap</field>
+        <field name="company_id" eval="False"/>
+    </record>
+</odoo>

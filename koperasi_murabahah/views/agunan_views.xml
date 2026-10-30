@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_agunan_form" model="ir.ui.view">
+        <field name="name">koperasi.murabahah.agunan.form</field>
+        <field name="model">koperasi.murabahah.agunan</field>
+        <field name="arch" type="xml">
+            <form string="Agunan">
+                <header>
+                    <button name="action_receive" type="object" string="Terima Agunan" class="btn-primary"
+                            invisible="state != 'draft'"/>
+                    <button name="action_return" type="object" string="Kembalikan Agunan" class="btn-primary"
+                            invisible="state != 'dipegang' or akad_state not in ('lunas', 'batal')"
+                            groups="koperasi_base.group_koperasi_pengurus"
+                            confirm="Agunan dikembalikan kepada penerima yang tercantum. Lanjutkan?"/>
+                    <button name="action_execute" type="object" string="Eksekusi Agunan"
+                            invisible="state != 'dipegang'" groups="koperasi_base.group_koperasi_pengurus"
+                            confirm="Agunan dicatat sudah dieksekusi (dijual/diambil alih). Pastikan catatan eksekusi sudah diisi. Lanjutkan?"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,dipegang,dikembalikan"/>
+                </header>
+                <sheet>
+                    <widget name="web_ribbon" title="Harus Dikembalikan" bg_color="text-bg-warning" invisible="not must_return"/>
+                    <div class="oe_title"><h1><field name="name" readonly="1"/></h1></div>
+                    <group>
+                        <group string="Agunan">
+                            <field name="akad_id" readonly="state != 'draft'" options="{'no_create': True}"/>
+                            <field name="partner_id"/>
+                            <field name="akad_state"/>
+                            <field name="agunan_type" readonly="state != 'draft'"/>
+                            <field name="description" readonly="state != 'draft'"/>
+                            <field name="document_no" readonly="state != 'draft'"/>
+                            <field name="owner_name" readonly="state != 'draft'"/>
+                            <field name="held_form" readonly="state != 'draft'"/>
+                        </group>
+                        <group string="Taksiran &amp; Penyimpanan">
+                            <field name="appraisal_value" readonly="state not in ('draft', 'dipegang')"/>
+                            <field name="appraisal_date" readonly="state not in ('draft', 'dipegang')"/>
+                            <field name="appraiser" readonly="state not in ('draft', 'dipegang')"/>
+                            <field name="storage_location" readonly="state not in ('draft', 'dipegang')"
+                                   required="state == 'draft'"/>
+                            <field name="date_received" readonly="state != 'draft'"/>
+                            <field name="received_by_id" invisible="not received_by_id"/>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="must_return" invisible="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Pengembalian" invisible="state not in ('dipegang', 'dikembalikan')">
+                            <field name="returned_to" readonly="state != 'dipegang'"/>
+                            <field name="date_returned" readonly="state != 'dipegang'"/>
+                            <field name="returned_by_id" invisible="not returned_by_id"/>
+                        </group>
+                        <group string="Eksekusi" invisible="state not in ('dipegang', 'dieksekusi')">
+                            <field name="date_executed" readonly="state != 'dipegang'"/>
+                            <field name="execution_note" readonly="state != 'dipegang'"
+                                   placeholder="Dasar eksekusi, harga jual, kelebihan dikembalikan ke anggota / kekurangan tetap utang"/>
+                        </group>
+                    </group>
+                    <field name="note" placeholder="Catatan lain..."/>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_agunan_list" model="ir.ui.view">
+        <field name="name">koperasi.murabahah.agunan.list</field>
+        <field name="model">koperasi.murabahah.agunan</field>
+        <field name="arch" type="xml">
+            <list string="Agunan" decoration-warning="must_return" decoration-muted="state in ('dikembalikan', 'dieksekusi')">
+                <field name="name"/>
+                <field name="akad_id"/>
+                <field name="partner_id"/>
+                <field name="agunan_type"/>
+                <field name="description"/>
+                <field name="document_no" optional="show"/>
+                <field name="owner_name" optional="hide"/>
+                <field name="appraisal_value" sum="Total"/>
+                <field name="storage_location" optional="show"/>
+                <field name="date_received" optional="show"/>
+                <field name="akad_state" optional="show"/>
+                <field name="state" widget="badge" decoration-success="state == 'dikembalikan'"
+                       decoration-info="state == 'dipegang'" decoration-danger="state == 'dieksekusi'"/>
+                <field name="must_return" column_invisible="1"/>
+                <field name="currency_id" column_invisible="1"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_agunan_search" model="ir.ui.view">
+        <field name="name">koperasi.murabahah.agunan.search</field>
+        <field name="model">koperasi.murabahah.agunan</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="akad_id"/>
+                <field name="partner_id"/>
+                <field name="description"/>
+                <field name="document_no"/>
+                <filter string="Dipegang Koperasi" name="dipegang" domain="[('state', '=', 'dipegang')]"/>
+                <filter string="Harus Dikembalikan" name="must_return" domain="[('must_return', '=', True)]"/>
+                <filter string="Dikembalikan" name="dikembalikan" domain="[('state', '=', 'dikembalikan')]"/>
+                <group>
+                    <filter string="Jenis" name="group_type" context="{'group_by': 'agunan_type'}"/>
+                    <filter string="Status" name="group_state" context="{'group_by': 'state'}"/>
+                    <filter string="Anggota" name="group_partner" context="{'group_by': 'partner_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_agunan" model="ir.actions.act_window">
+        <field name="name">Agunan</field>
+        <field name="res_model">koperasi.murabahah.agunan</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_agunan_search"/>
+        <field name="context">{'search_default_dipegang': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Belum ada agunan</p>
+            <p>Agunan dicatat per akad (tab Agunan di akad). Dikembalikan setelah akad lunas atau batal.</p>
+        </field>
+    </record>
+</odoo>

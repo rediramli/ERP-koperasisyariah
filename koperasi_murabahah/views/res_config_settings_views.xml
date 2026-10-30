@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_form_murabahah" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.koperasi.murabahah</field>
+        <field name="model">res.config.settings</field>
+        <field name="priority" eval="60"/>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <app data-string="Koperasi" string="Koperasi" name="koperasi_murabahah"
+                     logo="/koperasi_base/static/description/icon.png"
+                     groups="koperasi_base.group_koperasi_akuntan">
+                    <block title="Jurnal Murabahah" name="murabahah_journals">
+                        <setting string="Jurnal" company_dependent="1"
+                                 help="Jurnal umum untuk akad dan pengakuan margin, serta kas/bank default untuk angsuran.">
+                            <div class="content-group">
+                                <div class="row mt8">
+                                    <label for="murabahah_journal_id" class="col-lg-5 o_light_label"/>
+                                    <field name="murabahah_journal_id"/>
+                                </div>
+                                <div class="row">
+                                    <label for="murabahah_cash_journal_id" class="col-lg-5 o_light_label"/>
+                                    <field name="murabahah_cash_journal_id"/>
+                                </div>
+                            </div>
+                        </setting>
+                        <setting string="Akun Murabahah" company_dependent="1"
+                                 help="Akun-akun untuk jurnal otomatis (CLAUDE.md bagian 6).">
+                            <div class="content-group">
+                                <div class="row mt8">
+                                    <label for="murabahah_receivable_account_id" class="col-lg-5 o_light_label"/>
+                                    <field name="murabahah_receivable_account_id"/>
+                                </div>
+                                <div class="row">
+                                    <label for="murabahah_deferred_margin_account_id" class="col-lg-5 o_light_label"/>
+                                    <field name="murabahah_deferred_margin_account_id"/>
+                                </div>
+                                <div class="row">
+                                    <label for="murabahah_inventory_account_id" class="col-lg-5 o_light_label"/>
+                                    <field name="murabahah_inventory_account_id"/>
+                                </div>
+                                <div class="row">
+                                    <label for="murabahah_down_payment_account_id" class="col-lg-5 o_light_label"/>
+                                    <field name="murabahah_down_payment_account_id"/>
+                                </div>
+                                <div class="row">
+                                    <label for="murabahah_income_account_id" class="col-lg-5 o_light_label"/>
+                                    <field name="murabahah_income_account_id"/>
+                                </div>
+                                <div class="row">
+                                    <label for="murabahah_charity_account_id" class="col-lg-5 o_light_label"/>
+                                    <field name="murabahah_charity_account_id"/>
+                                </div>
+                                <div class="row">
+                                    <label for="murabahah_real_cost_account_id" class="col-lg-5 o_light_label"/>
+                                    <field name="murabahah_real_cost_account_id"/>
+                                </div>
+                            </div>
+                        </setting>
+                    </block>
+                    <block title="Perhitungan" name="murabahah_calculation">
+                        <setting string="Metode Margin dan Pembulatan" company_dependent="1"
+                                 help="Margin = % x (harga perolehan - uang muka). Angsuran dibulatkan; selisih di angsuran terakhir.">
+                            <div class="content-group">
+                                <div class="row mt8">
+                                    <label for="murabahah_margin_method" class="col-lg-5 o_light_label"/>
+                                    <field name="murabahah_margin_method"/>
+                                </div>
+                                <div class="row">
+                                    <label for="murabahah_installment_rounding" class="col-lg-5 o_light_label"/>
+                                    <field name="murabahah_installment_rounding"/>
+                                </div>
+                                <div class="row">
+                                    <label for="murabahah_payoff_method" class="col-lg-5 o_light_label"/>
+                                    <field name="murabahah_payoff_method"/>
+                                </div>
+                            </div>
+                        </setting>
+                        <setting string="Kolektibilitas" company_dependent="1"
+                                 help="Batas hari tunggakan. 0 hari = Lancar; di atas batas Diragukan = Macet.">
+                            <div class="content-group">
+                                <div class="row mt8">
+                                    <label for="murabahah_days_dpk" class="col-lg-5 o_light_label"/>
+                                    <field name="murabahah_days_dpk"/>
+                                </div>
+                                <div class="row">
+                                    <label for="murabahah_days_kurang_lancar" class="col-lg-5 o_light_label"/>
+                                    <field name="murabahah_days_kurang_lancar"/>
+                                </div>
+                                <div class="row">
+                                    <label for="murabahah_days_diragukan" class="col-lg-5 o_light_label"/>
+                                    <field name="murabahah_days_diragukan"/>
+                                </div>
+                            </div>
+                        </setting>
+                    </block>
+                    <block title="Analisis &amp; Persetujuan" name="murabahah_approval">
+                        <setting string="Batas Kelayakan" company_dependent="1"
+                                 help="Di atas batas DSR, atau untuk pembiayaan pengurus, persetujuan wajib disertai dasar persetujuan.">
+                            <div class="content-group">
+                                <div class="row mt8">
+                                    <label for="murabahah_max_dsr" class="col-lg-5 o_light_label"/>
+                                    <field name="murabahah_max_dsr"/>
+                                </div>
+                                <div class="row">
+                                    <label for="murabahah_pengurus_limit" class="col-lg-5 o_light_label"/>
+                                    <field name="murabahah_pengurus_limit"/>
+                                </div>
+                            </div>
+                        </setting>
+                    </block>
+                    <block title="Pengajuan &amp; KYC" name="murabahah_application">
+                        <setting string="Alur Pengajuan" company_dependent="1"
+                                 help="SOP-PEMBIAYAAN.md: akad baru dibuat dari Pengajuan yang sudah lolos KYC dan survei.">
+                            <div class="content-group">
+                                <div class="row mt8">
+                                    <label for="murabahah_require_application" class="col-lg-5 o_light_label"/>
+                                    <field name="murabahah_require_application"/>
+                                </div>
+                                <div class="row">
+                                    <label for="murabahah_non_member_policy" class="col-lg-5 o_light_label"/>
+                                    <field name="murabahah_non_member_policy"/>
+                                </div>
+                            </div>
+                        </setting>
+                        <setting string="Pra-skrining Usia" company_dependent="1"
+                                 help="Uang muka minimal dan tenor maksimal diatur per Kategori Pembiayaan.">
+                            <div class="content-group">
+                                <div class="row mt8">
+                                    <label for="murabahah_min_age" class="col-lg-5 o_light_label"/>
+                                    <field name="murabahah_min_age"/>
+                                </div>
+                                <div class="row">
+                                    <label for="murabahah_max_age" class="col-lg-5 o_light_label"/>
+                                    <field name="murabahah_max_age"/>
+                                </div>
+                            </div>
+                        </setting>
+                    </block>
+                    <block title="Dokumen Akad" name="murabahah_documents">
+                        <setting string="Penandatangan dan Format" company_dependent="1"
+                                 help="Dicetak di Akad Murabahah, Surat Pengakuan Utang, dan Berita Acara Serah Terima.">
+                            <div class="content-group">
+                                <div class="row mt8">
+                                    <label for="murabahah_signatory_name" class="col-lg-5 o_light_label"/>
+                                    <field name="murabahah_signatory_name"/>
+                                </div>
+                                <div class="row">
+                                    <label for="murabahah_signatory_title" class="col-lg-5 o_light_label"/>
+                                    <field name="murabahah_signatory_title"/>
+                                </div>
+                                <div class="row">
+                                    <label for="murabahah_document_city" class="col-lg-5 o_light_label"/>
+                                    <field name="murabahah_document_city"/>
+                                </div>
+                                <div class="row">
+                                    <label for="murabahah_template_approved" class="col-lg-5 o_light_label"/>
+                                    <field name="murabahah_template_approved"/>
+                                </div>
+                            </div>
+                        </setting>
+                    </block>
+                    <block title="Ringkasan Koperasi" name="koperasi_summary">
+                        <setting string="Simpanan Pokok" company_dependent="1"
+                                 help="Akun yang saldonya ditampilkan sebagai total simpanan pokok di Ringkasan Koperasi.">
+                            <div class="content-group">
+                                <div class="row mt8">
+                                    <label for="koperasi_simpanan_pokok_account_id" class="col-lg-5 o_light_label"/>
+                                    <field name="koperasi_simpanan_pokok_account_id"/>
+                                </div>
+                            </div>
+                        </setting>
+                    </block>
+                </app>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="action_murabahah_settings" model="ir.actions.act_window">
+        <field name="name">Pengaturan</field>
+        <field name="res_model">res.config.settings</field>
+        <field name="view_mode">form</field>
+        <field name="target">current</field>
+        <field name="context">{'module': 'koperasi_murabahah', 'bin_size': False}</field>
+    </record>
+</odoo>

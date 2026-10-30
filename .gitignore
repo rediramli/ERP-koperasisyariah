@@ -1,0 +1,35 @@
+# Python / Odoo
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# Rahasia: jangan pernah di-commit
+.env
+*.env
+!.env.example
+odoo.conf
+*.pem
+*.key
+
+# Backup dan data koperasi (data pribadi anggota, UU PDP)
+backups/
+filestore/
+*.dump
+*.sql
+*.tar.gz
+*.xlsx
+*.xls
+*.csv.bak
+import-odoo/
+contoh-laporan/
+contoh-dokumen/
+bukti/
+
+# Catatan internal proyek (berisi detail server dan data anggota)
+CLAUDE.md
+.claude/
+
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store

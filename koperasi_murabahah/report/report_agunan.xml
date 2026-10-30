@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_tanda_terima_agunan_document">
+        <t t-call="web.external_layout">
+            <t t-set="v" t-value="o.akad_id.get_document_values()"/>
+            <t t-set="labels" t-value="o.get_labels()"/>
+            <div class="page" style="font-size: 11pt;">
+                <t t-call="koperasi_murabahah.doc_draft_banner"/>
+                <h4 class="text-center mb-0">TANDA TERIMA AGUNAN</h4>
+                <p class="text-center">No. <t t-out="o.name"/> | Akad Murabahah No. <t t-out="o.akad_id.name"/></p>
+                <p><strong t-out="v['company'].name"/> (<strong>KOPERASI</strong>) telah menerima dari
+                    <strong t-out="o.partner_id.name"/> (<strong>ANGGOTA</strong>, No. Anggota <t t-out="v['member_no']"/>)
+                    agunan sebagai berikut:</p>
+                <table class="table table-sm table-bordered" style="width: 100%;">
+                    <tr><td style="width: 35%;">Jenis</td><td t-out="labels['type']"/></tr>
+                    <tr><td>Uraian</td><td t-out="o.description"/></tr>
+                    <tr><td>No. Dokumen</td><td t-out="o.document_no or v['dots']"/></tr>
+                    <tr><td>Atas Nama</td><td t-out="o.owner_name or v['dots']"/></tr>
+                    <tr><td>Yang Dipegang Koperasi</td><td t-out="labels['held']"/></tr>
+                    <tr><td>Nilai Taksiran</td><td t-out="v['format_rp'](o.appraisal_value) if o.appraisal_value else v['dots']"/></tr>
+                    <tr><td>Tanggal Diterima</td><td t-out="v['format_date'](o.date_received) or v['dots']"/></tr>
+                </table>
+                <ol>
+                    <li>Agunan ini menjamin pembayaran utang ANGGOTA berdasarkan Akad Murabahah No. <t t-out="o.akad_id.name"/>.</li>
+                    <li>KOPERASI menyimpan agunan dengan baik dan mengembalikannya setelah utang ANGGOTA lunas.</li>
+                    <li>Jika ANGGOTA tidak memenuhi kewajibannya, agunan dapat dijual dengan harga pasar atau harga yang disepakati.
+                        Kelebihan hasil penjualan dikembalikan kepada ANGGOTA, sedangkan kekurangannya tetap menjadi utang ANGGOTA.</li>
+                </ol>
+                <table class="table table-borderless" style="width: 100%; margin-top: 20px; page-break-inside: avoid;">
+                    <tr>
+                        <td class="text-center" style="width: 50%;">Yang menyerahkan,<br/>ANGGOTA<br/><br/><br/><br/>
+                            <strong t-out="o.partner_id.name"/></td>
+                        <td class="text-center" style="width: 50%;">Yang menerima,<br/>KOPERASI<br/><br/><br/><br/>
+                            <strong t-out="(o.received_by_id.name) or v['signatory'] or v['dots']"/></td>
+                    </tr>
+                </table>
+
+                <div t-if="o.state == 'dikembalikan'" style="page-break-inside: avoid; margin-top: 20px; border-top: 1px dashed #999; padding-top: 10px;">
+                    <h5 class="text-center">PENGEMBALIAN AGUNAN</h5>
+                    <p>Pada tanggal <t t-out="v['format_date'](o.date_returned)"/>, agunan di atas telah dikembalikan oleh KOPERASI
+                        kepada <strong t-out="o.returned_to"/> karena Akad Murabahah No. <t t-out="o.akad_id.name"/> telah
+                        <t t-out="'lunas' if o.akad_id.state == 'lunas' else 'berakhir'"/>. Penerima menyatakan telah menerima agunan
+                        dalam keadaan lengkap.</p>
+                    <table class="table table-borderless" style="width: 100%;">
+                        <tr>
+                            <td class="text-center" style="width: 50%;">Yang menyerahkan,<br/>KOPERASI<br/><br/><br/><br/>
+                                <strong t-out="o.returned_by_id.name or v['dots']"/></td>
+                            <td class="text-center" style="width: 50%;">Yang menerima,<br/><br/><br/><br/><br/>
+                                <strong t-out="o.returned_to"/></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <template id="report_tanda_terima_agunan">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="koperasi_murabahah.report_tanda_terima_agunan_document"/>
+            </t>
+        </t>
+    </template>
+
+    <record id="action_report_tanda_terima_agunan" model="ir.actions.report">
+        <field name="name">Tanda Terima Agunan</field>
+        <field name="model">koperasi.murabahah.agunan</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">koperasi_murabahah.report_tanda_terima_agunan</field>
+        <field name="print_report_name">'Tanda Terima Agunan - %s' % object.name</field>
+        <field name="binding_model_id" ref="model_koperasi_murabahah_agunan"/>
+        <field name="binding_type">report</field>
+    </record>
+</odoo>

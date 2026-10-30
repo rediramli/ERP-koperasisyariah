@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_reschedule_list" model="ir.ui.view">
+        <field name="name">koperasi.murabahah.reschedule.list</field>
+        <field name="model">koperasi.murabahah.reschedule</field>
+        <field name="arch" type="xml">
+            <list string="Restrukturisasi" create="false" edit="false" delete="false">
+                <field name="name"/>
+                <field name="date"/>
+                <field name="akad_id"/>
+                <field name="partner_id"/>
+                <field name="remaining_receivable" sum="Total"/>
+                <field name="arrears_days"/>
+                <field name="old_count"/>
+                <field name="new_count"/>
+                <field name="new_installment"/>
+                <field name="first_due_date"/>
+                <field name="last_due_date"/>
+                <field name="user_id"/>
+                <field name="currency_id" column_invisible="1"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_reschedule_form" model="ir.ui.view">
+        <field name="name">koperasi.murabahah.reschedule.form</field>
+        <field name="model">koperasi.murabahah.reschedule</field>
+        <field name="arch" type="xml">
+            <form string="Restrukturisasi" create="false" edit="false" delete="false">
+                <sheet>
+                    <div class="oe_title"><h1><field name="name"/></h1></div>
+                    <group>
+                        <group>
+                            <field name="akad_id"/>
+                            <field name="partner_id"/>
+                            <field name="sequence_no"/>
+                            <field name="date"/>
+                            <field name="user_id"/>
+                        </group>
+                        <group>
+                            <field name="remaining_receivable"/>
+                            <field name="remaining_margin"/>
+                            <field name="arrears_amount"/>
+                            <field name="arrears_days"/>
+                            <field name="old_count"/>
+                            <field name="new_count"/>
+                            <field name="new_installment"/>
+                            <field name="first_due_date"/>
+                            <field name="last_due_date"/>
+                            <field name="last_payment_id"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                    </group>
+                    <separator string="Alasan"/>
+                    <field name="reason"/>
+                    <separator string="Jadwal Lama (Belum Lunas)"/>
+                    <field name="old_schedule" class="font-monospace"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_reschedule" model="ir.actions.act_window">
+        <field name="name">Restrukturisasi</field>
+        <field name="res_model">koperasi.murabahah.reschedule</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Belum ada restrukturisasi</p>
+            <p>Penjadwalan kembali dibuat dari tombol "Penjadwalan Kembali" di akad aktif (grup Pengurus).</p>
+        </field>
+    </record>
+</odoo>

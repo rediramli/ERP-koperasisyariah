@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_koperasi_ringkasan_form" model="ir.ui.view">
+        <field name="name">koperasi.ringkasan.form</field>
+        <field name="model">koperasi.ringkasan</field>
+        <field name="arch" type="xml">
+            <form string="Ringkasan Koperasi">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>Ringkasan Koperasi</h1>
+                    </div>
+                    <p class="text-muted">
+                        Angka keuangan dari jurnal yang sudah diposting sampai tanggal di bawah.
+                        Tunggakan dan kolektibilitas selalu per hari ini. Teks broadcast tidak memuat nama anggota.
+                    </p>
+                    <group>
+                        <group>
+                            <field name="date_to"/>
+                            <field name="date_from"/>
+                            <field name="company_id" invisible="1"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Keuangan">
+                            <field name="cash_balance"/>
+                            <field name="receivable_balance"/>
+                            <field name="deferred_margin_balance"/>
+                            <field name="receivable_net"/>
+                            <field name="margin_income"/>
+                            <field name="simpanan_pokok"/>
+                            <field name="total_assets"/>
+                            <field name="total_liabilities"/>
+                            <field name="net_assets"/>
+                        </group>
+                        <group string="Akad &amp; Anggota">
+                            <field name="active_count"/>
+                            <field name="closed_count"/>
+                            <field name="arrears_count"/>
+                            <field name="arrears_amount"/>
+                            <field name="collectibility_text"/>
+                            <field name="member_count"/>
+                        </group>
+                    </group>
+                    <separator string="Teks Broadcast (WhatsApp)"/>
+                    <field name="message" widget="CopyClipboardButton" string="Salin Teks Broadcast"
+                           options="{'btn_class': 'btn-primary', 'icon': 'fa-copy'}"/>
+                    <field name="message" nolabel="1" readonly="1"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_koperasi_ringkasan" model="ir.actions.act_window">
+        <field name="name">Ringkasan Koperasi</field>
+        <field name="res_model">koperasi.ringkasan</field>
+        <field name="view_mode">form</field>
+        <field name="target">current</field>
+    </record>
+</odoo>
